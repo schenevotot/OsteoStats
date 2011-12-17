@@ -39,7 +39,8 @@ public class PatientLinePanel extends JPanel {
 
 	private GlobalSummary summary;
 
-	public PatientLinePanel(MainWindow mainWindow, SummaryDialog summaryDialog, GlobalSummary summary, GuiController controller) {
+	public PatientLinePanel(MainWindow mainWindow, SummaryDialog summaryDialog, GlobalSummary summary,
+			GuiController controller) {
 		super(new FlowLayout());
 		this.controller = controller;
 		this.summary = summary;
@@ -63,23 +64,19 @@ public class PatientLinePanel extends JPanel {
 			saturdayTextField.setText(String.valueOf(0));
 			totalTextField.setText(String.valueOf(0));
 		} else {
-			List<IntroducerSummary> introSummaryList = summary
-			.getIntroducerSummaryList();
+			List<IntroducerSummary> introSummaryList = summary.getIntroducerSummaryList();
 			if (introSummaryList != null) {
 				for (IntroducerSummary introducerSummary : introSummaryList) {
 					newLine(introducerSummary);
 				}
 			}
-			saturdayTextField.setText(String.valueOf(summary
-					.getNbrConsultationSaturday()));
-			totalTextField.setText(String.valueOf(summary
-					.getTotalNbrConsultation()));
+			saturdayTextField.setText(String.valueOf(summary.getNbrConsultationSaturday()));
+			totalTextField.setText(String.valueOf(summary.getTotalNbrConsultation()));
 		}
 	}
 
 	public synchronized void newLine(IntroducerSummary introSummary) {
-		IntroLinePanel introLinePanel = new IntroLinePanel(introSummary,
-				introUIId, this, controller);
+		IntroLinePanel introLinePanel = new IntroLinePanel(introSummary, introUIId, this, controller);
 		// Here we set the size, and not the id
 		add(introLinePanel, introLinePanelMap.size());
 		introLinePanelMap.put(introUIId, introLinePanel);
@@ -90,21 +87,26 @@ public class PatientLinePanel extends JPanel {
 		newLine(null);
 	}
 
+	public void refreshAllIntroducers() {
+		for (IntroLinePanel introPanel : introLinePanelMap.values()) {
+			introPanel.refreshIntroducerList();
+		}
+	}
+
 	private void addTechLine() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.TRAILING));
 
-		JButton editButton = new JButton("Éditer adressants", new ImageIcon(
-				getClass().getResource("/icons/application_form_edit.png")));
+		JButton editButton = new JButton("Éditer adressants", new ImageIcon(getClass().getResource(
+				"/icons/application_form_edit.png")));
 		editButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				summaryDialog.setVisible(false);
-				mainWindow.getTabbedPane().setSelectedIndex(1);
+				mainWindow.navigateToIntroducerPane(summaryDialog);
 
 			}
 		});
-
 
 		panel.add(editButton);
 		JButton newLineButton = createAddLineButton();
@@ -163,30 +165,24 @@ public class PatientLinePanel extends JPanel {
 			summaryFromUI = new GlobalSummary();
 		}
 
-		summaryFromUI.setNbrConsultationSaturday(Integer
-				.valueOf(saturdayTextField.getText()));
-		summaryFromUI.setTotalNbrConsultation(Integer.valueOf(totalTextField
-				.getText()));
+		summaryFromUI.setNbrConsultationSaturday(Integer.valueOf(saturdayTextField.getText()));
+		summaryFromUI.setTotalNbrConsultation(Integer.valueOf(totalTextField.getText()));
 
-		//Removing all previous IntroSummary
-		if(summaryFromUI.getIntroducerSummaryList() != null) {
+		// Removing all previous IntroSummary
+		if (summaryFromUI.getIntroducerSummaryList() != null) {
 			summaryFromUI.getIntroducerSummaryList().clear();
 		}
 
-
-		Collection<IntroLinePanel> introLineCollection = introLinePanelMap
-		.values();
+		Collection<IntroLinePanel> introLineCollection = introLinePanelMap.values();
 		for (IntroLinePanel introLinePanel : introLineCollection) {
-			Integer consultNbr = Integer.valueOf(introLinePanel.getTxtField()
-					.getText());
+			Integer consultNbr = Integer.valueOf(introLinePanel.getTxtField().getText());
 			IntroducerSummary introSummary = introLinePanel.getIntroSummary();
 
 			if (introSummary == null) {
 				introSummary = new IntroducerSummary();
 			}
 			summaryFromUI.addIntroducerSummary(introSummary);
-			introSummary.setIntroducer(((Introducer) (introLinePanel
-					.getIntroComboModel().getSelectedItem())));
+			introSummary.setIntroducer(((Introducer) (introLinePanel.getIntroComboModel().getSelectedItem())));
 
 			if (consultNbr > 0) {
 				introSummary.setConsultationsNbr(consultNbr);

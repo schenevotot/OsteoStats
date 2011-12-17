@@ -24,7 +24,7 @@ public class MainWindow extends JFrame {
 
 	private SummaryPanel summaryPanel;
 
-	private JPanel introducerPanel;
+	private IntroducerPanel introducerPanel;
 
 	private JPanel statPanel;
 
@@ -52,7 +52,7 @@ public class MainWindow extends JFrame {
 		summaryPanel = new SummaryPanel(this, controller, new BorderLayout());
 		tabbedPane.add("Récapitulatif", summaryPanel);
 
-		introducerPanel = new JPanel();
+		introducerPanel = new IntroducerPanel(controller);
 		tabbedPane.add("Adressants", introducerPanel);
 		
 		statPanel = new JPanel(new BorderLayout());
@@ -105,6 +105,12 @@ public class MainWindow extends JFrame {
 		}
 		new MainWindow();
 
+	}
+
+	public void navigateToIntroducerPane(Caller summaryDialog) {
+		introducerPanel.setCaller(summaryDialog);
+		getTabbedPane().setSelectedComponent(introducerPanel);
+		
 	}
 
 }

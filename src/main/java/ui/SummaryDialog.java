@@ -32,7 +32,7 @@ import util.DateUtil;
 
 import com.toedter.calendar.JDateChooser;
 
-public class SummaryDialog extends JDialog {
+public class SummaryDialog extends JDialog implements Caller {
 
 	private static final long serialVersionUID = 1L;
 	private static final String DIALOG_TITLE_NEW = "Nouvelle semaine";
@@ -312,6 +312,13 @@ public class SummaryDialog extends JDialog {
 		}
 
 		return errorList;
+	}
+	
+	
+	@Override
+	public void callBack() {
+		patientLinePanel.refreshAllIntroducers();
+		setVisible(true);
 	}
 
 	private class ValidateSummaryActionListener implements ActionListener {

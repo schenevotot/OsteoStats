@@ -17,20 +17,23 @@ public class GuiController {
 	}
 
 	public SummaryTableModel listAllSummary() {
-
-		List<GlobalSummary> globalSummaryList = daoFacade
-				.listAllGlobalSummary();
+		List<GlobalSummary> globalSummaryList = daoFacade.listAllGlobalSummary();
 		SummaryTableModel model = new SummaryTableModel(globalSummaryList);
 
 		return model;
 	}
 
-	public DefaultComboBoxModel<Introducer> listAllIntroducer() {
+	public DefaultComboBoxModel<Introducer> listAllIntroducersAsComboBoxModel() {
 		List<Introducer> introList = daoFacade.listAllIntroducer();
 		DefaultComboBoxModel<Introducer> model = new DefaultComboBoxModel<Introducer>(
 				introList.toArray(new Introducer[introList.size()]));
 		return model;
+	}
 
+	public IntroducerTableModel listAllIntroducersAsTableModel() {
+		List<Introducer> introList = daoFacade.listAllIntroducer();
+		IntroducerTableModel model = new IntroducerTableModel(introList);
+		return model;
 	}
 
 	public GlobalSummary saveOrUpdateGlobalSummary(GlobalSummary summary) {
