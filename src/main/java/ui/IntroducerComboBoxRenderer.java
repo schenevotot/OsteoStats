@@ -9,7 +9,7 @@ import javax.swing.ListCellRenderer;
 import model.Introducer;
 
 public class IntroducerComboBoxRenderer extends JLabel implements
-		ListCellRenderer<Introducer> {
+ListCellRenderer<Introducer> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,8 +29,9 @@ public class IntroducerComboBoxRenderer extends JLabel implements
 			setForeground(list.getForeground());
 		}
 
-		setText(value.getName());
-
+		if (value != null) {
+			setText(value.getName());
+		}
 		return this;
 	}
 

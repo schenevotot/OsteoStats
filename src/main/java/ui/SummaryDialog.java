@@ -146,12 +146,11 @@ public class SummaryDialog extends JDialog implements Caller {
 
 		JButton cancelButton = new JButton("Annuler");
 		cancelButton.addActionListener(new ActionListener() {
-        	 
-            public void actionPerformed(ActionEvent e)
-            {
-            	dispose();
-            }
-        });    
+
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		textPanelPart3.add(cancelButton);
 
 		JButton okButton = new JButton("OK");
@@ -224,6 +223,7 @@ public class SummaryDialog extends JDialog implements Caller {
 			startDateChooser.setEnabled(false);
 			endDateChooser.setEnabled(false);
 			weekNbrField.setEnabled(false);
+			patientLinePanel.setAllDropDownEnabled(false);
 
 		} else {
 			// Set some default values
@@ -306,15 +306,19 @@ public class SummaryDialog extends JDialog implements Caller {
 				errorList.add(error);
 			}
 			if (summary.getNbrConsultationSaturday() > summary.getTotalNbrConsultation()) {
-				UIError error = new UIError("Il y a plus de patients de patients le samedi qu'au total");
+				UIError error = new UIError("Il y a plus de patients le samedi qu'au total");
 				errorList.add(error);
 			}
+		}
+		Week week = summary.getWeek();
+		if (!DateUtil.isMonday(week.getStartDate()) || !DateUtil.isMonday(week.getEndDate())) {
+			UIError error = new UIError("Les dates doivent être des lundis");
+			errorList.add(error);
 		}
 
 		return errorList;
 	}
-	
-	
+
 	@Override
 	public void callBack() {
 		patientLinePanel.refreshAllIntroducers();
@@ -341,7 +345,7 @@ public class SummaryDialog extends JDialog implements Caller {
 	}
 
 	private void removeIncoherentParameters(GlobalSummary summaryFromUI) {
-		List<IntroducerSummary> introSummaryList = summary.getIntroducerSummaryList();
+		List<IntroducerSummary> introSummaryList = summaryFromUI.getIntroducerSummaryList();
 
 		if (introSummaryList != null && introSummaryList.size() > 1) {
 
@@ -359,7 +363,7 @@ public class SummaryDialog extends JDialog implements Caller {
 			for (int i = 0; i < sortedIntroSummaryList.size() - 1; i++) {
 				IntroducerSummary introSummary0 = sortedIntroSummaryList.get(i);
 				IntroducerSummary introSummary1 = sortedIntroSummaryList.get(i + 1);
-				if (introSummary0.getIntroducer().equals(introSummary1)) {
+				if (introSummary0.getIntroducer().equals(introSummary1.getIntroducer())) {
 					if (introSummary0.getId() == null) {
 						toRemoveSet.add(introSummary0);
 					} else if (introSummary1.getId() == null) {
@@ -367,7 +371,7 @@ public class SummaryDialog extends JDialog implements Caller {
 					}
 				}
 			}
-			
+
 			introSummaryList.removeAll(toRemoveSet);
 
 		}

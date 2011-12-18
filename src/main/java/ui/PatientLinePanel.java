@@ -46,7 +46,7 @@ public class PatientLinePanel extends JPanel {
 		this.summary = summary;
 		this.mainWindow = mainWindow;
 		this.summaryDialog = summaryDialog;
-		introUIId = 0;
+		this.introUIId = 0;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -191,6 +191,13 @@ public class PatientLinePanel extends JPanel {
 		}
 
 		return summaryFromUI;
+	}
+	
+	public void setAllDropDownEnabled(boolean enable) {
+		Collection<IntroLinePanel> introLineCollection = introLinePanelMap.values();
+		for (IntroLinePanel introLinePanel : introLineCollection) {
+			introLinePanel.setDropDownEnabled(enable);
+		}
 	}
 
 }

@@ -16,6 +16,10 @@ public class GuiController {
 		daoFacade = new DAOFacade();
 	}
 
+	public void shutdown() {
+		daoFacade.shutDown();
+	}
+
 	public SummaryTableModel listAllSummary() {
 		List<GlobalSummary> globalSummaryList = daoFacade.listAllGlobalSummary();
 		SummaryTableModel model = new SummaryTableModel(globalSummaryList);
@@ -40,11 +44,15 @@ public class GuiController {
 		return daoFacade.saveOrUpdateGlobalSummary(summary);
 	}
 
-	public void shutdown() {
-		daoFacade.shutDown();
+	public Introducer saveOrUpdateIntroducer(Introducer introducer) {
+		return daoFacade.saveOrUpdateIntroducer(introducer);
 	}
-
+	
 	public void deleteGlobalSummary(GlobalSummary selectedSummary) {
 		daoFacade.deleteGlobalSummary(selectedSummary);
+	}
+	
+	public void deleteIntroducer(Introducer introducer) {
+		daoFacade.deleteIntroducer(introducer);
 	}
 }

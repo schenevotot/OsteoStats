@@ -71,12 +71,8 @@ public class IntroLinePanel extends JPanel {
 		return combo;
 	}
 
-	public void refreshIntroducerList() {
-		introComboModel = controller.listAllIntroducersAsComboBoxModel();
-		combo.setModel(introComboModel);
-	}
-
 	private void init() {
+		refreshIntroducerList();
 		if (introSummary != null) {
 			txtField.setText(String.valueOf(introSummary.getConsultationsNbr()));
 			Introducer intro = introSummary.getIntroducer();
@@ -84,9 +80,22 @@ public class IntroLinePanel extends JPanel {
 		} else {
 			txtField.setText(String.valueOf(0));
 		}
-		refreshIntroducerList();
 	}
 
+	public void refreshIntroducerList() {
+		//Save the selection
+		Object selection = combo.getSelectedItem();
+		introComboModel = controller.listAllIntroducersAsComboBoxModel();
+		combo.setModel(introComboModel);
+		if (selection != null) {
+			combo.setSelectedItem(selection);
+		}
+	}
+	
+	public void setDropDownEnabled(boolean enable) {
+		combo.setEnabled(enable);
+	}
+	
 	public IntroducerSummary getIntroSummary() {
 		return introSummary;
 	}

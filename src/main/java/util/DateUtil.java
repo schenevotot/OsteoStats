@@ -72,5 +72,11 @@ public class DateUtil {
 
 		return c.getTime();
 	}
+	
+	public static boolean isMonday(Date date) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		return c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+	}
 
 }
