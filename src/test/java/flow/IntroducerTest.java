@@ -54,5 +54,15 @@ public class IntroducerTest {
 		List<Introducer> introList = HibernateUtil.listReuseSession(session, Introducer.class);
 		assertNotNull("introducer list not received", introList);
 	}
+	
+	@Test
+	public void testListThenSaveIntroducer() {
+		List<Introducer> introList = HibernateUtil.listReuseSession(session, Introducer.class);
+		assertNotNull("introducer list not received", introList);
+		
+		Introducer intro = new Introducer();
+		intro.setName("Tester introducer 9");
+		HibernateUtil.saveReuseSession(session, intro);
+	}
 
 }

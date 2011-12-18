@@ -3,6 +3,8 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JFrame;
@@ -12,6 +14,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jfree.data.time.DateRange;
+
+import ui.stats.TopTenWeek;
 
 public class MainWindow extends JFrame {
 
@@ -57,6 +63,17 @@ public class MainWindow extends JFrame {
 		
 		statPanel = new JPanel(new BorderLayout());
 		tabbedPane.add("Statistiques", statPanel);
+		
+		TopTenWeek stat = new TopTenWeek(controller);
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, 2000);
+		cal.set(Calendar.MONTH, Calendar.JANUARY);
+
+		Date lower = cal.getTime();
+		Date upper = new Date();
+		DateRange dateRange = new DateRange(lower, upper);
+		JPanel panel = stat.process(dateRange);
+		statPanel.add(panel);
 
 		// The following line enables to use scrolling tabs.
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);

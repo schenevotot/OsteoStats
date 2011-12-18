@@ -6,6 +6,9 @@ import javax.swing.DefaultComboBoxModel;
 
 import model.GlobalSummary;
 import model.Introducer;
+
+import org.jfree.data.time.DateRange;
+
 import access.DAOFacade;
 
 public class GuiController {
@@ -25,6 +28,12 @@ public class GuiController {
 		SummaryTableModel model = new SummaryTableModel(globalSummaryList);
 
 		return model;
+	}
+
+	public List<GlobalSummary> listNMaxSummaryInRange(DateRange dateRange, Integer max) {
+		List<GlobalSummary> globalSummaryList = daoFacade.listGlobalSummaryInRange(dateRange.getLowerDate(),
+				dateRange.getUpperDate(), max);
+		return globalSummaryList;
 	}
 
 	public DefaultComboBoxModel<Introducer> listAllIntroducersAsComboBoxModel() {
@@ -47,11 +56,11 @@ public class GuiController {
 	public Introducer saveOrUpdateIntroducer(Introducer introducer) {
 		return daoFacade.saveOrUpdateIntroducer(introducer);
 	}
-	
+
 	public void deleteGlobalSummary(GlobalSummary selectedSummary) {
 		daoFacade.deleteGlobalSummary(selectedSummary);
 	}
-	
+
 	public void deleteIntroducer(Introducer introducer) {
 		daoFacade.deleteIntroducer(introducer);
 	}

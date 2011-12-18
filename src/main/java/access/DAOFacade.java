@@ -1,5 +1,6 @@
 package access;
 
+import java.util.Date;
 import java.util.List;
 
 import model.GlobalSummary;
@@ -81,6 +82,12 @@ public class DAOFacade {
 	public List<GlobalSummary> listAllGlobalSummary() {
 		List<GlobalSummary> globalSummaryList = HibernateUtil.listReuseSessionOrderBy(session, GlobalSummary.class,
 				"week", "startDate");
+		return globalSummaryList;
+	}
+
+	public List<GlobalSummary> listGlobalSummaryInRange(Date lower, Date upper, Integer max) {
+		List<GlobalSummary> globalSummaryList = HibernateUtil.listReuseSessionDateRangeNMaxOrderBy(session,
+				GlobalSummary.class, "totalNbrConsultation", max, lower, upper);
 		return globalSummaryList;
 	}
 
