@@ -11,7 +11,7 @@ import org.jfree.data.time.DateRange;
 
 import ui.GuiController;
 
-public class TopTenWeek {
+public class TopTenWeek extends AbstractStat {
 
 	private static final Integer MAX = 10;
 
@@ -41,5 +41,7 @@ public class TopTenWeek {
 		}
 		return panel;
 	}
+	
+	
 
 }
