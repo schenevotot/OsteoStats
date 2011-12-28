@@ -3,8 +3,6 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JFrame;
@@ -15,8 +13,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jfree.data.time.DateRange;
-
+import ui.stats.StatsManager;
 import ui.stats.TopTenWeek;
 
 public class MainWindow extends JFrame {
@@ -61,27 +58,22 @@ public class MainWindow extends JFrame {
 		introducerPanel = new IntroducerPanel(controller);
 		tabbedPane.add("Adressants", introducerPanel);
 		
-		statPanel = new JPanel(new BorderLayout());
+		statPanel = buildStatPanel();
 		tabbedPane.add("Statistiques", statPanel);
 		
-		TopTenWeek stat = new TopTenWeek(controller);
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2000);
-		cal.set(Calendar.MONTH, Calendar.JANUARY);
-
-		Date lower = cal.getTime();
-		Date upper = new Date();
-		DateRange dateRange = new DateRange(lower, upper);
-		JPanel panel = stat.process(dateRange);
-		statPanel.add(panel);
-
 		// The following line enables to use scrolling tabs.
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		mainPanel.add(tabbedPane);
 	}
 	
 	
-
+	private JPanel buildStatPanel() {
+		StatsManager manager = new StatsManager();
+		manager.plugStat(new TopTenWeek(controller));
+		
+		return manager.processStatsSummaryPanel();
+	}
+	
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
@@ -92,7 +84,7 @@ public class MainWindow extends JFrame {
 
 	public static void main(String[] args) {
 		// Set the default locale to french
-		Locale.setDefault(Locale.FRENCH);
+		Locale.setDefault(Locale.FRANCE);
 		// Schedule a job for the event dispatch thread:
 		// creating and showing this application's GUI.
 		SwingUtilities.invokeLater(new Runnable() {

@@ -1,7 +1,9 @@
 package ui.stats;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,8 @@ import javax.swing.JPanel;
 public class StatsManager {
 
 	private List<Stat> statList;
+	private JPanel mainPanel;
+	private JPanel displayPanel;
 
 	public StatsManager() {
 		statList = new ArrayList<Stat>();
@@ -22,30 +26,30 @@ public class StatsManager {
 	}
 
 	public JPanel processStatsSummaryPanel() {
-		
-		DefaultComboBoxModel<Stat> model = new DefaultComboBoxModel<Stat>(
-				statList.toArray(new Stat[statList.size()]));
+		mainPanel = new JPanel(new BorderLayout());
+		DefaultComboBoxModel<Stat> model = new DefaultComboBoxModel<Stat>(statList.toArray(new Stat[statList.size()]));
 		JComboBox<Stat> comboBoxStats = new JComboBox<Stat>(model);
 		comboBoxStats.setRenderer(new StatComboBoxRenderer());
-		comboBoxStats.addActionListener(new StatSelectedListener());
-		
-		
-		JPanel panel = new JPanel();
-		panel.add(comboBoxStats);
-		
-		return panel;
-		
-		
+		comboBoxStats.addItemListener(new StatSelectedListener());
+		mainPanel.add(comboBoxStats, BorderLayout.NORTH);
+
+		displayPanel = new JPanel(new CardLayout());
+		for (Stat stat : statList) {
+			displayPanel.add(stat.display(), stat.getName());
+		}
+		mainPanel.add(displayPanel, BorderLayout.CENTER);
+
+		return mainPanel;
+
 	}
-	
-	private class StatSelectedListener implements ActionListener {
+
+	private class StatSelectedListener implements ItemListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			JComboBox<Stat> comboBoxStats = (JComboBox<Stat>)e.getSource();
-			Stat stat = (Stat)comboBoxStats.getSelectedItem();
-			
+		public void itemStateChanged(ItemEvent e) {
+			Stat stat = (Stat) e.getItem();
+			CardLayout cl = (CardLayout) displayPanel.getLayout();
+			cl.show(displayPanel, stat.getName());
 		}
-		
 	}
 }

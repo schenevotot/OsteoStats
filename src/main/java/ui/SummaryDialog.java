@@ -52,6 +52,8 @@ public class SummaryDialog extends JDialog implements Caller {
 	private JCheckBox businessWeek;
 	private JCheckBox schoolHolidayWeek;
 	private PatientLinePanel patientLinePanel;
+	private BugFixJTextFieldDateEditor bugFixEditor;
+	private BugFixJTextFieldDateEditor bugFixEditor2;
 
 	public SummaryDialog(MainWindow mainWindow, GuiController controller) {
 		this(mainWindow, controller, null);
@@ -99,28 +101,26 @@ public class SummaryDialog extends JDialog implements Caller {
 		JLabel weekLabel = new JLabel("Semaine");
 		textPanelPart1Line1.add(weekLabel);
 
-		weekNbrField = new JTextField(2);
-		weekNbrField.addFocusListener(new DateChangeFocusListener());
-
-		textPanelPart1Line1.add(weekNbrField);
-
 		JLabel weekLabel2 = new JLabel("du");
 		textPanelPart1Line1.add(weekLabel2);
 
-		BugFixJTextFieldDateEditor bugFixEditor = new BugFixJTextFieldDateEditor();
+		bugFixEditor = new BugFixJTextFieldDateEditor();
+		bugFixEditor.addFocusListener(new DateChangeFocusListener());
 		startDateChooser = new JDateChooser(bugFixEditor);
-		startDateChooser.addFocusListener(new DateChangeFocusListener());
-
 		textPanelPart1Line1.add(startDateChooser);
 
 		JLabel weekLabel3 = new JLabel("au");
 		textPanelPart1Line1.add(weekLabel3);
 
-		BugFixJTextFieldDateEditor bugFixEditor2 = new BugFixJTextFieldDateEditor();
+		bugFixEditor2 = new BugFixJTextFieldDateEditor();
+		bugFixEditor2.addFocusListener(new DateChangeFocusListener());
 		endDateChooser = new JDateChooser(bugFixEditor2);
-		endDateChooser.addFocusListener(new DateChangeFocusListener());
-
 		textPanelPart1Line1.add(endDateChooser);
+		
+		weekNbrField = new JTextField(2);
+		weekNbrField.setEnabled(false);
+
+		textPanelPart1Line1.add(weekNbrField);
 	}
 
 	private void addPart1Line2(JPanel textPanelPart1) {
@@ -169,25 +169,17 @@ public class SummaryDialog extends JDialog implements Caller {
 
 		@Override
 		public void focusGained(FocusEvent e) {
-			// Do nothing
-
 		}
 
 		@Override
 		public void focusLost(FocusEvent event) {
-			if (event.getComponent() == weekNbrField && DateUtil.isValidWeekNbr(weekNbrField.getText())) {
-				int weekNbr = Integer.parseInt(weekNbrField.getText());
-				Date startDate = DateUtil.createStartDateFromWeekNbr(weekNbr);
-				updateStartDate(startDate);
-				Date endDate = DateUtil.createEndDateFromWeekNbr(weekNbr);
-				updateEndDate(endDate);
-			} else if (event.getComponent() == startDateChooser && startDateChooser.getDate() != null) {
+			if (event.getComponent() == bugFixEditor && startDateChooser.getDate() != null) {
 				Date startDate = startDateChooser.getDate();
 				Date endDate = DateUtil.createEndDateFromStartDate(startDate);
 				updateEndDate(endDate);
 				int weekNbr = DateUtil.getWeekNbr(startDate);
 				updateWeekNbr(weekNbr);
-			} else if (event.getComponent() == endDateChooser && endDateChooser.getDate() != null) {
+			} else if (event.getComponent() == bugFixEditor2 && endDateChooser.getDate() != null) {
 				Date endDate = endDateChooser.getDate();
 				Date startDate = DateUtil.createStartDateFromEndDate(endDate);
 				updateStartDate(startDate);
@@ -222,7 +214,6 @@ public class SummaryDialog extends JDialog implements Caller {
 			// Desactivate most options
 			startDateChooser.setEnabled(false);
 			endDateChooser.setEnabled(false);
-			weekNbrField.setEnabled(false);
 			patientLinePanel.setAllDropDownEnabled(false);
 
 		} else {

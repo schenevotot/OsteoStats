@@ -6,9 +6,6 @@ import javax.swing.DefaultComboBoxModel;
 
 import model.GlobalSummary;
 import model.Introducer;
-
-import org.jfree.data.time.DateRange;
-
 import access.DAOFacade;
 
 public class GuiController {
@@ -30,7 +27,7 @@ public class GuiController {
 		return model;
 	}
 
-	public List<GlobalSummary> listNMaxSummaryInRange(DateRange dateRange, Integer max) {
+	public List<GlobalSummary> listNMaxSummaryInRange(DateRangeNullable dateRange, Integer max) {
 		List<GlobalSummary> globalSummaryList = daoFacade.listGlobalSummaryInRange(dateRange.getLowerDate(),
 				dateRange.getUpperDate(), max);
 		return globalSummaryList;

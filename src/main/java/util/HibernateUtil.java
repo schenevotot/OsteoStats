@@ -3,6 +3,7 @@ package util;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -88,7 +89,7 @@ public class HibernateUtil {
 		Transaction tx = session.beginTransaction();
 		@SuppressWarnings("unchecked")
 		List<E> result = session.createCriteria(clazz).createCriteria(colName).addOrder(Order.asc(fieldName))
-				.add(Restrictions.gt("startDate", lower)).add(Restrictions.lt("endDate", lower)).list();
+		.add(Restrictions.gt("startDate", lower)).add(Restrictions.lt("endDate", lower)).list();
 		tx.commit();
 		return result;
 	}
@@ -98,9 +99,16 @@ public class HibernateUtil {
 		System.out.println("Listing " + clazz);
 
 		Transaction tx = session.beginTransaction();
+		Criteria criteria = session.createCriteria(clazz).addOrder(Order.desc(fieldName)).createCriteria("week");
+		if (lower != null) {
+			criteria = criteria.add(Restrictions.gt("startDate", lower));
+		}
+		if (upper != null) {
+			criteria = criteria.add(Restrictions.lt("endDate", upper));
+		}
+		criteria = criteria.setMaxResults(maxNbr);
 		@SuppressWarnings("unchecked")
-		List<E> result = session.createCriteria(clazz).addOrder(Order.desc(fieldName)).createCriteria("week").add(Restrictions.gt("startDate", lower))
-				.add(Restrictions.lt("endDate", upper)).setMaxResults(maxNbr).list();
+		List<E> result = criteria.list();
 		tx.commit();
 		return result;
 	}

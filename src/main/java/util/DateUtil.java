@@ -1,9 +1,14 @@
 package util;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
+	
+	private static DateFormat dateFormatter = DateFormat.getDateInstance();
+
+
 	public static boolean isValidWeekNbr(String text) {
 		if (text != null) {
 			int weekNbr = Integer.parseInt(text);
@@ -79,4 +84,7 @@ public class DateUtil {
 		return c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
 	}
 
+	public static String dateFormat(Date date) {
+		return dateFormatter.format(date);
+	}
 }
