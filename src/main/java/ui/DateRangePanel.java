@@ -6,19 +6,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 public class DateRangePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JDateChooser startDateChooser;
 	private JDateChooser endDateChooser;
+	private JTextFieldDateEditor bugFixEditor;
+	private JTextFieldDateEditor bugFixEditor2;
 
 	public DateRangePanel() {
 
 		JLabel fromLabel = new JLabel("Du");
 		add(fromLabel);
 
-		BugFixJTextFieldDateEditor bugFixEditor = new BugFixJTextFieldDateEditor();
+		bugFixEditor = new BugFixJTextFieldDateEditor();
 		startDateChooser = new JDateChooser(bugFixEditor);
 		startDateChooser.getJCalendar().setNullDateButtonVisible(true);
 		add(startDateChooser);
@@ -26,7 +29,7 @@ public class DateRangePanel extends JPanel {
 		JLabel toLabel = new JLabel("au");
 		add(toLabel);
 
-		BugFixJTextFieldDateEditor bugFixEditor2 = new BugFixJTextFieldDateEditor();
+		bugFixEditor2 = new BugFixJTextFieldDateEditor();
 		endDateChooser = new JDateChooser(bugFixEditor2);
 		endDateChooser.getJCalendar().setNullDateButtonVisible(true);
 		add(endDateChooser);
@@ -36,8 +39,32 @@ public class DateRangePanel extends JPanel {
 		return startDateChooser.getDate();
 	}
 
+	public JTextFieldDateEditor getStartDateEditor() {
+		return bugFixEditor;
+	}
+
+	public void setStartDate(Date date) {
+		startDateChooser.setDate(date);
+	}
+
+	public void setStartDateEditorEnabled(boolean enable) {
+		startDateChooser.setEnabled(enable);
+	}
+
 	public Date getEndDate() {
 		return endDateChooser.getDate();
+	}
+
+	public JTextFieldDateEditor getEndDateEditor() {
+		return bugFixEditor2;
+	}
+
+	public void setEndDate(Date date) {
+		endDateChooser.setDate(date);
+	}
+
+	public void setEndDateEditorEnabled(boolean enable) {
+		endDateChooser.setEnabled(enable);
 	}
 
 	public DateRangeNullable getDateRange() {
