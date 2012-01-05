@@ -106,7 +106,9 @@ public class HibernateUtil {
 		if (upper != null) {
 			criteria = criteria.add(Restrictions.lt("endDate", upper));
 		}
-		criteria = criteria.setMaxResults(maxNbr);
+		if (maxNbr != null) {
+			criteria = criteria.setMaxResults(maxNbr);
+		}
 		@SuppressWarnings("unchecked")
 		List<E> result = criteria.list();
 		tx.commit();

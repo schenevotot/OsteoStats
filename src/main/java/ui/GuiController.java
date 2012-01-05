@@ -33,6 +33,12 @@ public class GuiController {
 		return globalSummaryList;
 	}
 
+	public List<GlobalSummary> listAllSummaryInRange(DateRangeNullable dateRange) {
+		List<GlobalSummary> globalSummaryList = daoFacade.listGlobalSummaryInRange(dateRange.getLowerDate(),
+				dateRange.getUpperDate(), null);
+		return globalSummaryList;
+	}
+
 	public DefaultComboBoxModel<Introducer> listAllIntroducersAsComboBoxModel() {
 		List<Introducer> introList = daoFacade.listAllIntroducer();
 		DefaultComboBoxModel<Introducer> model = new DefaultComboBoxModel<Introducer>(

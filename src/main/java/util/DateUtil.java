@@ -3,11 +3,11 @@ package util;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateUtil {
-	
-	private static DateFormat dateFormatter = DateFormat.getDateInstance();
 
+	private static DateFormat dateFormatter = DateFormat.getDateInstance();
 
 	public static boolean isValidWeekNbr(String text) {
 		if (text != null) {
@@ -45,7 +45,7 @@ public class DateUtil {
 		c.setTime(date);
 		return c.get(Calendar.WEEK_OF_YEAR);
 	}
-	
+
 	public static Date createStartDateFromWeekNbr(int weekNbr) {
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.WEEK_OF_YEAR, weekNbr);
@@ -61,7 +61,7 @@ public class DateUtil {
 
 		return c.getTime();
 	}
-	
+
 	public static Date createEndDateFromStartDate(Date startDate) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(startDate);
@@ -69,7 +69,7 @@ public class DateUtil {
 
 		return c.getTime();
 	}
-	
+
 	public static Date createStartDateFromEndDate(Date endDate) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(endDate);
@@ -77,7 +77,7 @@ public class DateUtil {
 
 		return c.getTime();
 	}
-	
+
 	public static boolean isMonday(Date date) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
@@ -86,5 +86,27 @@ public class DateUtil {
 
 	public static String dateFormat(Date date) {
 		return dateFormatter.format(date);
+	}
+
+	public static int getMonthInYearForWeek(Date weekStart) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(weekStart);
+		c.add(Calendar.DATE, 2);
+
+		return c.get(Calendar.MONTH);
+	}
+
+	public static int getYearForWeek(Date weekStart) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(weekStart);
+		c.add(Calendar.DATE, 2);
+
+		return c.get(Calendar.YEAR);
+	}
+
+	public static String getMonthNameFromInt(int month) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, month);
+		return c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 	}
 }
