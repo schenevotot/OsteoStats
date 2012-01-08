@@ -27,15 +27,15 @@ public class GuiController {
 		return model;
 	}
 
-	public List<GlobalSummary> listNMaxSummaryInRange(DateRangeNullable dateRange, Integer max) {
-		List<GlobalSummary> globalSummaryList = daoFacade.listGlobalSummaryInRange(dateRange.getLowerDate(),
-				dateRange.getUpperDate(), max);
+	public List<GlobalSummary> listNMaxSummaryInRange(DateRangeNullable dateRange, Integer max, Boolean businessWeekOnly) {
+		List<GlobalSummary> globalSummaryList = daoFacade.listGlobalSummaryInRangeOrderbyNbrConsultation(dateRange.getLowerDate(),
+				dateRange.getUpperDate(), max, businessWeekOnly);
 		return globalSummaryList;
 	}
 
-	public List<GlobalSummary> listAllSummaryInRange(DateRangeNullable dateRange) {
+	public List<GlobalSummary> listAllSummaryInRange(DateRangeNullable dateRange, Boolean businessWeekOnly, Boolean holidaysOnly) {
 		List<GlobalSummary> globalSummaryList = daoFacade.listGlobalSummaryInRange(dateRange.getLowerDate(),
-				dateRange.getUpperDate(), null);
+				dateRange.getUpperDate(), businessWeekOnly, holidaysOnly);
 		return globalSummaryList;
 	}
 

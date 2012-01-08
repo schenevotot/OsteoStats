@@ -37,7 +37,7 @@ public class TopTenMonth extends AbstractDateRangeStat {
 	}
 
 	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {
-		return controller.listAllSummaryInRange(dateRange);
+		return controller.listAllSummaryInRange(dateRange, true, null);
 	}
 
 	private void processResult(List<GlobalSummary> summaryList) {

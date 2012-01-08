@@ -54,6 +54,15 @@ public class HibernateUtil {
 		tx.commit();
 	}
 
+	public synchronized static void saveOrUpdateReuseSession(Session session, List<? extends Object> entityList) {
+		Transaction tx = session.beginTransaction();
+		for (Object entity : entityList) {
+			System.out.println("Saving " + entity.getClass());
+			session.saveOrUpdate(entity);
+		}
+		tx.commit();
+	}
+
 	public synchronized static <E> List<E> listReuseSession(Session session, Class<E> clazz) {
 		System.out.println("Listing " + clazz);
 
@@ -83,23 +92,44 @@ public class HibernateUtil {
 	}
 
 	public static <E> List<E> listReuseSessionDateRangeOrderBy(Session session, Class<E> clazz, String colName,
-			String fieldName, Date lower, Date upper) {
+			String fieldName, Date lower, Date upper, Boolean businessWeekOnly, Boolean holidaysOnly) {
 		System.out.println("Listing " + clazz);
 
 		Transaction tx = session.beginTransaction();
+
+		Criteria criteria = session.createCriteria(clazz).createCriteria(colName);
+
+		if (businessWeekOnly != null && businessWeekOnly.booleanValue()) {
+			criteria = criteria.add(Restrictions.eq("businessWeek", Boolean.TRUE));
+		}
+		if (holidaysOnly != null) {
+			criteria = criteria.add(Restrictions.eq("schoolHolidaysWeek", holidaysOnly));
+		}
+		if (fieldName != null) {
+			criteria = criteria.addOrder(Order.asc(fieldName));
+		}
+		if (lower != null) {
+			criteria = criteria.add(Restrictions.gt("startDate", lower));
+		}
+		if (upper != null) {
+			criteria = criteria.add(Restrictions.lt("endDate", upper));
+		}
+
 		@SuppressWarnings("unchecked")
-		List<E> result = session.createCriteria(clazz).createCriteria(colName).addOrder(Order.asc(fieldName))
-		.add(Restrictions.gt("startDate", lower)).add(Restrictions.lt("endDate", lower)).list();
+		List<E> result = criteria.list();
 		tx.commit();
 		return result;
 	}
 
 	public static <E> List<E> listReuseSessionDateRangeNMaxOrderBy(Session session, Class<E> clazz, String fieldName,
-			Integer maxNbr, Date lower, Date upper) {
+			Integer maxNbr, Date lower, Date upper, Boolean businessWeekOnly) {
 		System.out.println("Listing " + clazz);
 
 		Transaction tx = session.beginTransaction();
 		Criteria criteria = session.createCriteria(clazz).addOrder(Order.desc(fieldName)).createCriteria("week");
+		if (businessWeekOnly != null && businessWeekOnly.booleanValue()) {
+			criteria = criteria.add(Restrictions.eq("businessWeek", Boolean.TRUE));
+		}
 		if (lower != null) {
 			criteria = criteria.add(Restrictions.gt("startDate", lower));
 		}

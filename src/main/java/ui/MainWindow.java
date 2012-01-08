@@ -13,7 +13,10 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import ui.stats.AverageWeek;
+import ui.stats.Saturday;
 import ui.stats.StatsManager;
+import ui.stats.TopTenIntroducer;
 import ui.stats.TopTenMonth;
 import ui.stats.TopTenWeek;
 
@@ -72,6 +75,9 @@ public class MainWindow extends JFrame {
 		StatsManager manager = new StatsManager();
 		manager.plugStat(new TopTenWeek(controller));
 		manager.plugStat(new TopTenMonth(controller));
+		manager.plugStat(new AverageWeek(controller));
+		manager.plugStat(new Saturday(controller));
+		manager.plugStat(new TopTenIntroducer(controller));
 		
 		return manager.processStatsSummaryPanel();
 	}

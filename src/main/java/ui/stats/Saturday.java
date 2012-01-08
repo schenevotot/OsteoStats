@@ -7,46 +7,45 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import model.GlobalSummary;
-import model.Week;
 import ui.DateRangeNullable;
 import ui.GuiController;
-import util.DateUtil;
 
-public class TopTenWeek extends AbstractDateRangeStat {
-
-	private static final Integer MAX = 10;
+public class Saturday extends AbstractDateRangeStat {
 
 	private GuiController controller;
 
-	public TopTenWeek(GuiController controller) {
+	public Saturday(GuiController controller) {
 		super();
 		super.setActionListener(new ProcessListener());
 		this.controller = controller;
 	}
 
 	public String getName() {
-		return "Top 10 semaines";
+		return "Proportion de consulations le samedi";
 	}
 
 	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {
-		return controller.listNMaxSummaryInRange(dateRange, MAX, true);
+		return controller.listAllSummaryInRange(dateRange, true, null);
 	}
 
 	private void processResult(List<GlobalSummary> summaryList) {
 
 		resultPanel.removeAll();
-		int i = 1;
-		
-		for (GlobalSummary globalSummary : summaryList) {
-			JLabel label = new JLabel();
-			Week week = globalSummary.getWeek();
-			label.setText(i + ". " + "Semaine " + week.getWeekNbrInYear() + " du " + DateUtil.dateFormat(week.getStartDate()) + " : "
-					+ globalSummary.getTotalNbrConsultation() + " consultations");
-			resultPanel.add(label);
-			i++;
-		}
+		JLabel label = new JLabel();
+		label.setText("Proportion de consultations le samedi :" + saturdayPart(summaryList) * 100 + " %");
+		resultPanel.add(label);
 		resultPanel.updateUI();
 
+	}
+
+	private float saturdayPart(List<GlobalSummary> summaryList) {
+		float saturdays = 0;
+		float total = 0;
+		for (GlobalSummary globalSummary : summaryList) {
+			saturdays += globalSummary.getNbrConsultationSaturday();
+			total += globalSummary.getTotalNbrConsultation();
+		}
+		return saturdays / total;
 	}
 
 	private class ProcessListener implements ActionListener {

@@ -21,34 +21,6 @@ public class DAOFacade {
 
 	}
 
-	/*
-	 * public Week saveNewWeek(Integer weekNbrInYear, Date startDate, Date
-	 * endDate, Boolean businessWeek, Boolean schoolHolidaysWeek) { Week week =
-	 * new Week(weekNbrInYear, startDate, endDate, businessWeek,
-	 * schoolHolidaysWeek); HibernateUtil.save(week); return week; }
-	 */
-
-	/*
-	 * public Introducer saveNewIntroducer(String name) { Introducer intro = new
-	 * Introducer(name); HibernateUtil.save(intro); return intro; }
-	 */
-
-	/*
-	 * public IntroducerSummary saveNewIntroducerSummary(Introducer introducer,
-	 * Integer consultationsNbr) { IntroducerSummary introSummary = new
-	 * IntroducerSummary(introducer, consultationsNbr);
-	 * HibernateUtil.save(introSummary); return introSummary; }
-	 */
-
-	/*
-	 * public GlobalSummary saveNewGlobalSummary(Week week,
-	 * List<IntroducerSummary> introducerSummaryList, Integer
-	 * nbrConsultationSaturday, Integer totalNbrConsultation) { GlobalSummary
-	 * summary = new GlobalSummary(week, introducerSummaryList,
-	 * nbrConsultationSaturday, totalNbrConsultation);
-	 * HibernateUtil.save(summary); return summary; }
-	 */
-
 	public void deleteIntroducer(Introducer introducer) {
 		HibernateUtil.deleteReuseSession(session, introducer);
 	}
@@ -60,17 +32,10 @@ public class DAOFacade {
 	public GlobalSummary saveOrUpdateGlobalSummary(GlobalSummary summary) {
 		List<IntroducerSummary> introSumList = summary.getIntroducerSummaryList();
 		if (introSumList != null) {
-			for (IntroducerSummary introducerSummary : introSumList) {
-				if (introducerSummary.getId() == null) {
-					HibernateUtil.saveOrUpdateReuseSession(session, introducerSummary);
-				}
-				if (introducerSummary.getId() == null) {
-					System.err.println("IntroducerSummary added but still no Id");
-				}
-			}
+			HibernateUtil.saveOrUpdateReuseSession(session, introSumList);
 		}
 
-		HibernateUtil.saveReuseSession(session, summary);
+		HibernateUtil.saveOrUpdateReuseSession(session, summary);
 		return summary;
 	}
 
@@ -85,9 +50,16 @@ public class DAOFacade {
 		return globalSummaryList;
 	}
 
-	public List<GlobalSummary> listGlobalSummaryInRange(Date lower, Date upper, Integer max) {
+	public List<GlobalSummary> listGlobalSummaryInRange(Date lower, Date upper, Boolean businessWeekOnly, Boolean holidaysOnly) {
+		List<GlobalSummary> globalSummaryList = HibernateUtil.listReuseSessionDateRangeOrderBy(session,
+				GlobalSummary.class, "week", "startDate", lower, upper, businessWeekOnly, holidaysOnly);
+		return globalSummaryList;
+	}
+
+	public List<GlobalSummary> listGlobalSummaryInRangeOrderbyNbrConsultation(Date lower, Date upper, Integer max,
+			Boolean businessWeekOnly) {
 		List<GlobalSummary> globalSummaryList = HibernateUtil.listReuseSessionDateRangeNMaxOrderBy(session,
-				GlobalSummary.class, "totalNbrConsultation", max, lower, upper);
+				GlobalSummary.class, "totalNbrConsultation", max, lower, upper, businessWeekOnly);
 		return globalSummaryList;
 	}
 
