@@ -48,7 +48,7 @@ public class ComparativeConsultationPerWeek extends AbstractDateRangeStat {
 	}
 
 	public String getName() {
-		return "Diagramme comparatif des consulations par semaine";
+		return "Diagramme comparatif des consultations par semaine";
 	}
 
 	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {

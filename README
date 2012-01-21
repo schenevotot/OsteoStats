@@ -3,3 +3,4 @@ OsteoStats
 
 A tool to create stats !
 
+Run mvn package to get an executable jar with all dependencies
