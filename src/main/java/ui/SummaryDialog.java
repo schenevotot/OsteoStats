@@ -287,6 +287,14 @@ public class SummaryDialog extends JDialog implements Caller {
 		patientLinePanel.refreshAllIntroducers();
 		setVisible(true);
 	}
+	
+	
+
+	@Override
+	public void dispose() {		
+		super.dispose();
+		mainWindow.getSummaryPanel().enableAllButtons();
+	}
 
 	private class ValidateSummaryActionListener implements ActionListener {
 

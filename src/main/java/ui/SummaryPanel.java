@@ -31,8 +31,11 @@ public class SummaryPanel extends JPanel {
 	private JTable jTable;
 	private SummaryTableModel summaryTableModel;
 	private GuiController controller;
-	private JButton editWeek;
 	private MainWindow mainWindow;
+
+	private JButton editWeekButton;
+	private JButton addWeekButton;
+	private JButton removeWeekButton;
 
 	public SummaryPanel(MainWindow mainWindow, GuiController controller, LayoutManager layout) {
 		super(layout);
@@ -65,18 +68,18 @@ public class SummaryPanel extends JPanel {
 
 	private void addButtonsPanel() {
 		JPanel buttonPanel = new JPanel();
-		JButton addWeek = new JButton("Ajouter semaine");
-		addWeek.addActionListener(new NewOrModifySummaryListener(mainWindow, false));
-		buttonPanel.add(addWeek);
+		addWeekButton = new JButton("Ajouter semaine");
+		addWeekButton.addActionListener(new NewOrModifySummaryListener(mainWindow, false));
+		buttonPanel.add(addWeekButton);
 
-		editWeek = new JButton("Modifier semaine");
-		editWeek.setEnabled(false);
-		editWeek.addActionListener(new NewOrModifySummaryListener(mainWindow, true));
-		buttonPanel.add(editWeek);
+		editWeekButton = new JButton("Modifier semaine");
+		editWeekButton.setEnabled(false);
+		editWeekButton.addActionListener(new NewOrModifySummaryListener(mainWindow, true));
+		buttonPanel.add(editWeekButton);
 
-		JButton removeWeek = new JButton("Supprimer semaine");
-		removeWeek.addActionListener(new DeleteSummaryListener(this));
-		buttonPanel.add(removeWeek);
+		removeWeekButton = new JButton("Supprimer semaine");
+		removeWeekButton.addActionListener(new DeleteSummaryListener(this));
+		buttonPanel.add(removeWeekButton);
 
 		add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -106,6 +109,20 @@ public class SummaryPanel extends JPanel {
 		}
 	}
 
+	private void setAllButtonsEnabled(boolean enabled) {
+		editWeekButton.setEnabled(enabled);
+		addWeekButton.setEnabled(enabled);
+		removeWeekButton.setEnabled(enabled);
+	}
+
+	public void disableAllButtons() {
+		setAllButtonsEnabled(false);
+	}
+
+	public void enableAllButtons() {
+		setAllButtonsEnabled(true);
+	}
+
 	public void refreshTableWithAllSummaries() {
 		refreshTable(controller.listAllSummary());
 	}
@@ -132,6 +149,7 @@ public class SummaryPanel extends JPanel {
 			} else {
 				dialog = new SummaryDialog(mainWindow, controller);
 			}
+			mainWindow.getSummaryPanel().disableAllButtons();
 			dialog.display();
 
 		}
@@ -241,11 +259,11 @@ public class SummaryPanel extends JPanel {
 			if (selectedRow > -1) {
 				// GlobalSummary summary = summaryTableModel
 				// .getGlobalSummaryAt(selectedRow);
-				editWeek.setEnabled(true);
+				editWeekButton.setEnabled(true);
 			} else {
 				// Disable the button if no row is selected (when the table is
 				// empty for example)
-				editWeek.setEnabled(false);
+				editWeekButton.setEnabled(false);
 			}
 		}
 	}
