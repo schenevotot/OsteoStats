@@ -26,7 +26,7 @@ import model.GlobalSummary;
 
 public class SummaryPanel extends JPanel {
 
-	private static final Border chiselBorder = new ChiselBorder();
+	private static final Border CHISEL_BORDER = new ChiselBorder();
 	private static final long serialVersionUID = 1L;
 	private JTable jTable;
 	private SummaryTableModel summaryTableModel;
@@ -45,7 +45,7 @@ public class SummaryPanel extends JPanel {
 		setPreferredSize(new Dimension(800, 600));
 		addTable();
 		addButtonsPanel();
-		setBorder(chiselBorder);
+		setBorder(CHISEL_BORDER);
 	}
 
 	private void addTable() {
@@ -123,7 +123,7 @@ public class SummaryPanel extends JPanel {
 		setAllButtonsEnabled(true);
 	}
 
-	public void refreshTableWithAllSummaries() {
+	public final void refreshTableWithAllSummaries() {
 		refreshTable(controller.listAllSummary());
 	}
 

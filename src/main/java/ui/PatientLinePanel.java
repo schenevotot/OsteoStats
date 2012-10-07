@@ -75,7 +75,7 @@ public class PatientLinePanel extends JPanel {
 		}
 	}
 
-	public synchronized void newLine(IntroducerSummary introSummary) {
+	public final synchronized void newLine(IntroducerSummary introSummary) {
 		IntroLinePanel introLinePanel = new IntroLinePanel(introSummary, introUIId, this, controller);
 		// Here we set the size, and not the id
 		add(introLinePanel, introLinePanelMap.size());
@@ -83,11 +83,11 @@ public class PatientLinePanel extends JPanel {
 		introUIId++;
 	}
 
-	public synchronized void newLine() {
+	public final synchronized void newLine() {
 		newLine(null);
 	}
 
-	public void refreshAllIntroducers() {
+	public final void refreshAllIntroducers() {
 		for (IntroLinePanel introPanel : introLinePanelMap.values()) {
 			introPanel.refreshIntroducerList();
 		}
@@ -123,7 +123,7 @@ public class PatientLinePanel extends JPanel {
 		revalidate();
 	}
 
-	private JButton createAddLineButton() {
+	private final JButton createAddLineButton() {
 		JButton newLine = new JButton();
 		newLine.setIcon(new ImageIcon(getClass().getResource("/icons/add.png")));
 		newLine.setBorderPainted(false);

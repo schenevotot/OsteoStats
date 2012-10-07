@@ -10,16 +10,19 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HibernateUtil {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(HibernateUtil.class);
 	private static SessionFactory sessionFactory;
 
 	static {
 		try {
 			sessionFactory = new Configuration().configure().buildSessionFactory();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Problem creating the session Factory", e);
 		}
 	}
 
@@ -32,7 +35,7 @@ public class HibernateUtil {
 	}
 
 	public static Session createSession() {
-		System.out.println("Creating session");
+		LOGGER.info("Creating session");
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		return session;
 	}
@@ -48,7 +51,7 @@ public class HibernateUtil {
 	}
 
 	public synchronized static void saveOrUpdateReuseSession(Session session, Object entity) {
-		System.out.println("Saving " + entity.getClass());
+		LOGGER.info("Saving " + entity.getClass());
 		Transaction tx = session.beginTransaction();
 		session.saveOrUpdate(entity);
 		tx.commit();
@@ -57,15 +60,14 @@ public class HibernateUtil {
 	public synchronized static void saveOrUpdateReuseSession(Session session, List<? extends Object> entityList) {
 		Transaction tx = session.beginTransaction();
 		for (Object entity : entityList) {
-			System.out.println("Saving " + entity.getClass());
+			LOGGER.info("Saving " + entity.getClass());
 			session.saveOrUpdate(entity);
 		}
 		tx.commit();
 	}
 
 	public synchronized static <E> List<E> listReuseSession(Session session, Class<E> clazz) {
-		System.out.println("Listing " + clazz);
-
+		LOGGER.info("Listing " + clazz);
 		Transaction tx = session.beginTransaction();
 		@SuppressWarnings("unchecked")
 		List<E> result = session.createCriteria(clazz).list();
@@ -75,7 +77,7 @@ public class HibernateUtil {
 
 	public synchronized static <E> List<E> listReuseSessionOrderBy(Session session, Class<E> clazz, String colName,
 			String fieldName) {
-		System.out.println("Listing " + clazz);
+		LOGGER.info("Listing " + clazz);
 
 		Transaction tx = session.beginTransaction();
 		@SuppressWarnings("unchecked")
@@ -93,7 +95,7 @@ public class HibernateUtil {
 
 	public static <E> List<E> listReuseSessionDateRangeOrderBy(Session session, Class<E> clazz, String colName,
 			String fieldName, Date lower, Date upper, Boolean businessWeekOnly, Boolean holidaysOnly) {
-		System.out.println("Listing " + clazz);
+		LOGGER.info("Listing " + clazz);
 
 		Transaction tx = session.beginTransaction();
 
@@ -123,7 +125,7 @@ public class HibernateUtil {
 
 	public static <E> List<E> listReuseSessionDateRangeNMaxOrderBy(Session session, Class<E> clazz, String fieldName,
 			Integer maxNbr, Date lower, Date upper, Boolean businessWeekOnly) {
-		System.out.println("Listing " + clazz);
+		LOGGER.info("Listing " + clazz);
 
 		Transaction tx = session.beginTransaction();
 		Criteria criteria = session.createCriteria(clazz).addOrder(Order.desc(fieldName)).createCriteria("week");

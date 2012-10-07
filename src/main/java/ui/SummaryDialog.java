@@ -121,7 +121,7 @@ public class SummaryDialog extends JDialog implements Caller {
 		textPanelPart2.add(patientLinePanel);
 	}
 
-	private void addPart3(JPanel textPanel, String cstraint) {
+	private final void addPart3(JPanel textPanel, String cstraint) {
 		JPanel textPanelPart3 = new JPanel();
 		textPanel.add(textPanelPart3, cstraint);
 
@@ -219,8 +219,7 @@ public class SummaryDialog extends JDialog implements Caller {
 	}
 
 	private void displayPopupWithErrors(List<UIError> errorList) {
-		StringBuffer message = new StringBuffer();
-		message.append("Merci de revoir les erreurs suivantes:\n\r");
+		StringBuffer message = new StringBuffer("Merci de revoir les erreurs suivantes:\n\r");
 		for (UIError uiError : errorList) {
 			message.append(" - ");
 			message.append(uiError.getMessage());

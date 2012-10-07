@@ -13,7 +13,7 @@ import util.HibernateUtil;
 
 public class DAOFacade {
 
-	private Session session;
+	private final transient Session session;
 
 	public DAOFacade() {
 		super();
@@ -45,27 +45,23 @@ public class DAOFacade {
 	}
 
 	public List<GlobalSummary> listAllGlobalSummary() {
-		List<GlobalSummary> globalSummaryList = HibernateUtil.listReuseSessionOrderBy(session, GlobalSummary.class,
+		return HibernateUtil.listReuseSessionOrderBy(session, GlobalSummary.class,
 				"week", "startDate");
-		return globalSummaryList;
 	}
 
 	public List<GlobalSummary> listGlobalSummaryInRange(Date lower, Date upper, Boolean businessWeekOnly, Boolean holidaysOnly) {
-		List<GlobalSummary> globalSummaryList = HibernateUtil.listReuseSessionDateRangeOrderBy(session,
+		return HibernateUtil.listReuseSessionDateRangeOrderBy(session,
 				GlobalSummary.class, "week", "startDate", lower, upper, businessWeekOnly, holidaysOnly);
-		return globalSummaryList;
 	}
 
 	public List<GlobalSummary> listGlobalSummaryInRangeOrderbyNbrConsultation(Date lower, Date upper, Integer max,
 			Boolean businessWeekOnly) {
-		List<GlobalSummary> globalSummaryList = HibernateUtil.listReuseSessionDateRangeNMaxOrderBy(session,
+		return HibernateUtil.listReuseSessionDateRangeNMaxOrderBy(session,
 				GlobalSummary.class, "totalNbrConsultation", max, lower, upper, businessWeekOnly);
-		return globalSummaryList;
 	}
 
 	public List<Introducer> listAllIntroducer() {
-		List<Introducer> introducerList = HibernateUtil.listReuseSession(session, Introducer.class);
-		return introducerList;
+		return HibernateUtil.listReuseSession(session, Introducer.class);
 	}
 
 	public void shutDown() {

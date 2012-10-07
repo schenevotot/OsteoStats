@@ -52,13 +52,11 @@ public class IntroducerTableModel extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int c) {
 		Class<?> clazz = null;
-		switch (c) {
-		case NAME_POSITION:
+		if (c == NAME_POSITION) {
 			clazz = String.class;
-			break;
-		default:
+		}
+		else {
 			clazz = String.class;
-			break;
 		}
 		return clazz;
 	}
@@ -66,11 +64,8 @@ public class IntroducerTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Introducer introducer = introducerList.get(rowIndex);
-		switch (columnIndex) {
-		case 0:
+		if (columnIndex == 0) {
 			return introducer.getName();
-		default:
-			break;
 		}
 		return null;
 	}

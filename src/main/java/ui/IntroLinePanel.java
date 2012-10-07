@@ -82,7 +82,7 @@ public class IntroLinePanel extends JPanel {
 		}
 	}
 
-	public void refreshIntroducerList() {
+	public final void refreshIntroducerList() {
 		//Save the selection
 		Object selection = combo.getSelectedItem();
 		introComboModel = controller.listAllIntroducersAsComboBoxModel();
