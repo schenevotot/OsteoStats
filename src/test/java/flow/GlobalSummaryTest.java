@@ -88,7 +88,7 @@ public class GlobalSummaryTest {
 		Week week = new Week();
 		week.setWeekNbrInYear(42);
 		week.setSchoolHolidaysWeek(Boolean.FALSE);
-		week.setBusinessWeek(Boolean.TRUE);
+		week.setBusinessWeek(100);
 		HibernateUtil.saveReuseSession(session, week);
 		return week;
 	}

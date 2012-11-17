@@ -102,7 +102,7 @@ public class HibernateUtil {
 		Criteria criteria = session.createCriteria(clazz).createCriteria(colName);
 
 		if (businessWeekOnly != null && businessWeekOnly.booleanValue()) {
-			criteria = criteria.add(Restrictions.eq("businessWeek", Boolean.TRUE));
+			criteria = criteria.add(Restrictions.gt("businessWeek", 0));
 		}
 		if (holidaysOnly != null) {
 			criteria = criteria.add(Restrictions.eq("schoolHolidaysWeek", holidaysOnly));
@@ -130,7 +130,7 @@ public class HibernateUtil {
 		Transaction tx = session.beginTransaction();
 		Criteria criteria = session.createCriteria(clazz).addOrder(Order.desc(fieldName)).createCriteria("week");
 		if (businessWeekOnly != null && businessWeekOnly.booleanValue()) {
-			criteria = criteria.add(Restrictions.eq("businessWeek", Boolean.TRUE));
+			criteria = criteria.add(Restrictions.gt("businessWeek", 0));
 		}
 		if (lower != null) {
 			criteria = criteria.add(Restrictions.gt("startDate", lower));
@@ -143,6 +143,25 @@ public class HibernateUtil {
 		}
 		@SuppressWarnings("unchecked")
 		List<E> result = criteria.list();
+		tx.commit();
+		return result;
+	}
+
+	public synchronized static <E> E findReuseSession(Session session, Class<E> clazz, String id) {
+		LOGGER.info("Finding " + clazz + " with id=" + id);
+		Transaction tx = session.beginTransaction();
+
+		E result = clazz.cast(session.get(clazz, id));
+		tx.commit();
+		return result;
+
+	}
+
+	public synchronized static <E> E findByField(Session session, Class<E> clazz, String fieldName, Object fieldValue) {
+		LOGGER.info("Finding " + clazz + " with " + fieldName + " = " + fieldValue);
+		Transaction tx = session.beginTransaction();
+		E result = clazz.cast(session.createCriteria(clazz).add(Restrictions.naturalId().set(fieldName, fieldValue))
+				.setCacheable(true).uniqueResult());
 		tx.commit();
 		return result;
 	}

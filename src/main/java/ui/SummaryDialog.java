@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -44,11 +45,11 @@ public class SummaryDialog extends JDialog implements Caller {
 	private JTextField weekNbrField;
 
 	private JPanel textPanelPart2;
-	private JCheckBox businessWeek;
+	private JTextField businessWeek;
 	private JCheckBox schoolHolidayWeek;
 	private PatientLinePanel patientLinePanel;
 	private DateRangePanel dateRangePanel;
-
+	private boolean isModify;
 
 	public SummaryDialog(MainWindow mainWindow, GuiController controller) {
 		this(mainWindow, controller, null);
@@ -63,8 +64,10 @@ public class SummaryDialog extends JDialog implements Caller {
 		setResizable(true);
 
 		if (summary == null) {
+			this.isModify = false;
 			setTitle(DIALOG_TITLE_NEW);
 		} else {
+			this.isModify = true;
 			setTitle(DIALOG_TITLE_OLD);
 		}
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -107,8 +110,10 @@ public class SummaryDialog extends JDialog implements Caller {
 	private void addPart1Line2(JPanel textPanelPart1) {
 		JPanel textPanelPart1Line2 = new JPanel();
 		textPanelPart1.add(textPanelPart1Line2);
-		businessWeek = new JCheckBox("Semaine travaillée");
+		businessWeek = new JTextField("Proportion travaillée (%)");
 		textPanelPart1Line2.add(businessWeek);
+		JLabel businessWeekLabel = new JLabel("% travaillée");
+		textPanelPart1Line2.add(businessWeekLabel);
 
 		schoolHolidayWeek = new JCheckBox("Vacances scolaires");
 		textPanelPart1Line2.add(schoolHolidayWeek);
@@ -180,7 +185,7 @@ public class SummaryDialog extends JDialog implements Caller {
 			updateWeekNbr(week.getWeekNbrInYear());
 			dateRangePanel.setStartDate(week.getStartDate());
 			dateRangePanel.setEndDate(week.getEndDate());
-			businessWeek.setSelected(week.getBusinessWeek());
+			businessWeek.setText(String.valueOf(week.getBusinessWeek()));
 			schoolHolidayWeek.setSelected(week.getSchoolHolidaysWeek());
 
 			// Desactivate most options
@@ -194,7 +199,7 @@ public class SummaryDialog extends JDialog implements Caller {
 			updateWeekNbr(DateUtil.getWeekNbr(startDate));
 			dateRangePanel.setStartDate(startDate);
 			dateRangePanel.setEndDate(DateUtil.getEndDateSuggestion());
-			businessWeek.setSelected(true);
+			businessWeek.setText("100");
 			schoolHolidayWeek.setSelected(false);
 		}
 	}
@@ -210,7 +215,7 @@ public class SummaryDialog extends JDialog implements Caller {
 			week.setStartDate(dateRangePanel.getStartDate());
 			week.setEndDate(dateRangePanel.getEndDate());
 		}
-		week.setBusinessWeek(businessWeek.isSelected());
+		week.setBusinessWeek(Integer.valueOf(businessWeek.getText()));
 		week.setSchoolHolidaysWeek(schoolHolidayWeek.isSelected());
 
 		summaryFromUI.setWeek(week);
@@ -277,6 +282,10 @@ public class SummaryDialog extends JDialog implements Caller {
 			UIError error = new UIError("Les dates doivent être des lundis");
 			errorList.add(error);
 		}
+		if (!isModify && controller.containsSummaryForWeek(week)) {
+			UIError error = new UIError("Il y a déjà un rapport pour cette semaine");
+			errorList.add(error);
+		}
 
 		return errorList;
 	}
@@ -286,11 +295,9 @@ public class SummaryDialog extends JDialog implements Caller {
 		patientLinePanel.refreshAllIntroducers();
 		setVisible(true);
 	}
-	
-	
 
 	@Override
-	public void dispose() {		
+	public void dispose() {
 		super.dispose();
 		mainWindow.getSummaryPanel().enableAllButtons();
 	}

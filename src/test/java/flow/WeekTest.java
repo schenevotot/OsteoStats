@@ -34,7 +34,7 @@ public class WeekTest {
 
 		Week week = new Week();
 		week.setStartDate(new Date());
-		week.setBusinessWeek(Boolean.FALSE);
+		week.setBusinessWeek(0);
 		week.setEndDate(new Date());
 		week.setWeekNbrInYear(5);
 		HibernateUtil.saveReuseSession(session, week);
@@ -46,7 +46,7 @@ public class WeekTest {
 
 		Week week = new Week();
 		week.setStartDate(new Date());
-		week.setBusinessWeek(Boolean.FALSE);
+		week.setBusinessWeek(0);
 		week.setEndDate(new Date());
 		week.setWeekNbrInYear(5);
 		HibernateUtil.saveReuseSession(session, week);
@@ -70,7 +70,7 @@ public class WeekTest {
 
 		Week week = new Week();
 		week.setStartDate(new Date());
-		week.setBusinessWeek(Boolean.FALSE);
+		week.setBusinessWeek(0);
 		week.setEndDate(new Date());
 		week.setWeekNbrInYear(5);
 		HibernateUtil.saveReuseSession(session, week);
@@ -78,7 +78,7 @@ public class WeekTest {
 		Week week3 = new Week();
 		week3.setWeekNbrInYear(42);
 		week3.setSchoolHolidaysWeek(Boolean.FALSE);
-		week3.setBusinessWeek(Boolean.TRUE);
+		week3.setBusinessWeek(100);
 		HibernateUtil.saveReuseSession(session, week3);
 
 		List<Week> weekList = HibernateUtil.listReuseSession(session, Week.class);
@@ -109,7 +109,7 @@ public class WeekTest {
 		Week week3 = new Week();
 		week3.setWeekNbrInYear(42);
 		week3.setSchoolHolidaysWeek(Boolean.FALSE);
-		week3.setBusinessWeek(Boolean.TRUE);
+		week3.setBusinessWeek(100);
 		HibernateUtil.saveReuseSession(session, week3);
 
 	}

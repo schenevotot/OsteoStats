@@ -6,6 +6,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import model.GlobalSummary;
 import model.Introducer;
+import model.Week;
 import access.DAOFacade;
 
 public class GuiController {
@@ -50,6 +51,10 @@ public class GuiController {
 		List<Introducer> introList = daoFacade.listAllIntroducer();
 		IntroducerTableModel model = new IntroducerTableModel(introList);
 		return model;
+	}
+	
+	public boolean containsSummaryForWeek(Week week) {
+		return daoFacade.isGlobalSummaryByStartDateEndDate(week);
 	}
 
 	public GlobalSummary saveOrUpdateGlobalSummary(GlobalSummary summary) {

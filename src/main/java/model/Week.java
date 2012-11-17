@@ -20,7 +20,7 @@ public class Week {
 	
 	private Date endDate;
 
-	private Boolean businessWeek;
+	private Integer businessWeek;
 	
 	private Boolean schoolHolidaysWeek;
 
@@ -30,7 +30,7 @@ public class Week {
 	
 
 	public Week(Integer weekNbrInYear, Date startDate, Date endDate,
-			Boolean businessWeek, Boolean schoolHolidaysWeek) {
+			Integer businessWeek, Boolean schoolHolidaysWeek) {
 		super();
 		this.weekNbrInYear = weekNbrInYear;
 		this.startDate = startDate;
@@ -72,11 +72,11 @@ public class Week {
 		this.endDate = endDate;
 	}
 
-	public Boolean getBusinessWeek() {
+	public Integer getBusinessWeek() {
 		return businessWeek;
 	}
 
-	public void setBusinessWeek(Boolean businessWeek) {
+	public void setBusinessWeek(Integer businessWeek) {
 		this.businessWeek = businessWeek;
 	}
 

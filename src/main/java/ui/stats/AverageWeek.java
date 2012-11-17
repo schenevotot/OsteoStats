@@ -7,6 +7,9 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import model.GlobalSummary;
+
+import org.apache.commons.math3.stat.descriptive.moment.Mean;
+
 import ui.DateRangeNullable;
 import ui.GuiController;
 
@@ -41,9 +44,9 @@ public class AverageWeek extends AbstractDateRangeStat {
 
 		resultPanel.removeAll();
 
-		float globalAverage = average(summaryList);
-		float holidaysAverage = average(summaryListHolidays);
-		float notHolidaysAverage = average(summaryListNotHolidays);
+		Double globalAverage = average(summaryList);
+		Double holidaysAverage = average(summaryListHolidays);
+		Double notHolidaysAverage = average(summaryListNotHolidays);
 
 		JLabel globalLabel = new JLabel();
 		globalLabel.setText("Moyenne globale : " + globalAverage);
@@ -61,12 +64,18 @@ public class AverageWeek extends AbstractDateRangeStat {
 
 	}
 
-	private float average(List<GlobalSummary> summaryList) {
-		float sum = 0f;
+	private Double average(List<GlobalSummary> summaryList) {
+		double[] values = new double[summaryList.size()];
+		double[] weights =  new double[summaryList.size()];
+		int i = 0;
 		for (GlobalSummary globalSummary : summaryList) {
-			sum += globalSummary.getTotalNbrConsultation();
+			values[i]=Double.valueOf(globalSummary.getTotalNbrConsultation());
+			weights[i] = Double.valueOf(globalSummary.getWeek().getBusinessWeek() / 100);
+			i++;
 		}
-		return sum / summaryList.size();
+		Mean mean = new Mean();
+		mean.evaluate(values, weights);
+		return mean.evaluate(values, weights);
 	}
 
 	private class ProcessListener implements ActionListener {
