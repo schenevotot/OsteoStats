@@ -109,4 +109,24 @@ public class DateUtil {
 		c.set(Calendar.MONTH, month);
 		return c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 	}
+	
+	public static Date getLastDayOfYear(int year) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, 11); // 11 = december
+		c.set(Calendar.DAY_OF_MONTH, 31); // new years eve
+
+		Date end = c.getTime();
+		return end;
+	}
+	
+	public static Date getFirstDayOfYear(int year) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, 0); // 0 = january
+		c.set(Calendar.DAY_OF_MONTH, 1); 
+
+		Date start = c.getTime();
+		return start;
+	}
 }

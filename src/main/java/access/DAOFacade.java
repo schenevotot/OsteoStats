@@ -6,7 +6,6 @@ import java.util.List;
 import model.GlobalSummary;
 import model.Introducer;
 import model.IntroducerSummary;
-import model.InvalidDataException;
 import model.Week;
 
 import org.hibernate.Session;

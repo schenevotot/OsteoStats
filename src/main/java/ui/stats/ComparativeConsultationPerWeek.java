@@ -97,8 +97,14 @@ public class ComparativeConsultationPerWeek extends AbstractDateRangeStat {
 		for (TimeSeriesCollection dataSet : dataSetList) {
 			// Create an X axis, not visible
 			DateAxis localDateAxis = new DateAxis(domainTitle);
-			localDateAxis.setVisible(false);
+			localDateAxis.setVisible(true);
 			localDateAxis.setDateFormatOverride(new SimpleDateFormat(dateFormat));
+
+			// For the range of the axis to have a good superposition
+			int year = ((org.jfree.data.time.Week) dataSet.getSeries(0).getTimePeriod(0)).getYearValue();
+			localDateAxis.setMaximumDate(DateUtil.getLastDayOfYear(year));
+			localDateAxis.setMinimumDate(DateUtil.getFirstDayOfYear(year));
+
 			plot.setDomainAxis(i, localDateAxis);
 			plot.setDataset(i, dataSet);
 			plot.mapDatasetToDomainAxis(i, i);
@@ -122,6 +128,10 @@ public class ComparativeConsultationPerWeek extends AbstractDateRangeStat {
 			renderer.setBaseOutlineStroke(stroke);
 			plot.setRenderer(i, renderer);
 			i++;
+
+			// System.out.println("localDateAxis "+ i + " min date "+
+			// localDateAxis.getMinimumDate() + " max date "+
+			// localDateAxis.getMaximumDate());
 		}
 		// Set one axis visible and change it
 		plot.getDomainAxis().setVisible(true);
