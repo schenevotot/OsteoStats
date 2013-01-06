@@ -54,7 +54,7 @@ public class GuiController {
 	}
 	
 	public boolean containsSummaryForWeek(Week week) {
-		return daoFacade.isGlobalSummaryByStartDateEndDate(week);
+		return daoFacade.isGlobalSummaryByStartDate(week);
 	}
 
 	public GlobalSummary saveOrUpdateGlobalSummary(GlobalSummary summary) {

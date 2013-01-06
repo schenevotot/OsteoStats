@@ -63,15 +63,18 @@ public class TopTenIntroducer extends AbstractDateRangeStat {
 		Map<Introducer, Integer> introMap = new HashMap<Introducer, Integer>();
 		for (GlobalSummary globalSummary : summaryList) {
 			List<IntroducerSummary> introSummaryList = globalSummary.getIntroducerSummaryList();
-			for (IntroducerSummary introducerSummary : introSummaryList) {
-				Introducer introducer = introducerSummary.getIntroducer();
-				if (!introMap.containsKey(introducer)) {
-					introMap.put(introducer, 0);
+			//The list can be empty if no IntroducerSummary exists for the week and if the globalSummary has not been
+			//persisted yet.
+			if (introSummaryList != null) {
+				for (IntroducerSummary introducerSummary : introSummaryList) {
+					Introducer introducer = introducerSummary.getIntroducer();
+					if (!introMap.containsKey(introducer)) {
+						introMap.put(introducer, 0);
+					}
+					Integer currentNbr = introMap.get(introducer);
+					Integer nbr = introducerSummary.getConsultationsNbr();
+					introMap.put(introducer, currentNbr + nbr);
 				}
-				Integer currentNbr = introMap.get(introducer);
-				Integer nbr = introducerSummary.getConsultationsNbr();
-				introMap.put(introducer, currentNbr + nbr);
-
 			}
 		}
 		Set<Entry<Introducer, Integer>> entrySet = introMap.entrySet();

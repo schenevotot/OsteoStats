@@ -71,8 +71,8 @@ public class DAOFacade {
 		HibernateUtil.shutdown();
 	}
 	
-	public boolean isGlobalSummaryByStartDateEndDate(Week week) {
-		return HibernateUtil.findByField(session, Week.class, "weekNbrInYear", week.getWeekNbrInYear()) != null;
+	public boolean isGlobalSummaryByStartDate(Week week) {
+		return HibernateUtil.findByField(session, Week.class, "startDate", week.getStartDate()) != null;
 	}
 
 }
