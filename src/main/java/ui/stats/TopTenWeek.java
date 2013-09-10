@@ -2,6 +2,7 @@ package ui.stats;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -40,7 +41,13 @@ public class TopTenWeek extends AbstractDateRangeStat {
 		for (GlobalSummary globalSummary : summaryList) {
 			JLabel label = new JLabel();
 			Week week = globalSummary.getWeek();
-			label.setText(i + ". " + "Semaine " + week.getWeekNbrInYear() + " du " + DateUtil.dateFormat(week.getStartDate()) + " : "
+			Date startDate = week.getStartDate();
+			String startDateFormat = "???";
+			if (startDate != null) {
+				startDateFormat = DateUtil.dateFormat(week.getStartDate());
+			}
+			
+			label.setText(i + ". " + "Semaine " + week.getWeekNbrInYear() + " du " + startDateFormat + " : "
 					+ globalSummary.getTotalNbrConsultation() + " consultations");
 			resultPanel.add(label);
 			i++;

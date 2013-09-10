@@ -30,7 +30,6 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 	private static final DecimalFormat DEC_FORMAT = new DecimalFormat("#0.000");
 	private GuiController controller;
 
-
 	public ConsultationPerPeriod(GuiController controller) {
 		super.setActionListener(new ProcessListener());
 		DEC_FORMAT.setRoundingMode(RoundingMode.HALF_UP);
@@ -45,8 +44,6 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 		return controller.listAllSummaryInRange(dateRange, null, null);
 	}
 
-	
-	
 	private void processResult(List<GlobalSummary> summaryList) {
 		resultPanel.removeAll();
 
@@ -63,12 +60,12 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 	private TimeSeriesCollection createTimeSeriesCollection(List<GlobalSummary> summaryList) {
 		TimeSeriesCollection dataSet = new TimeSeriesCollection();
 		TimeSeries series = new TimeSeries("Consultations");
-		int i = 0;
 		for (GlobalSummary summary : summaryList) {
-			org.jfree.data.time.Week week = new org.jfree.data.time.Week(summary.getWeek().getWeekNbrInYear(),
-					DateUtil.getYearForWeek(summary.getWeek().getStartDate()));
-			series.add(week, summary.getTotalNbrConsultation());
-			i++;
+			if (summary.getWeek().getStartDate() != null) {
+				org.jfree.data.time.Week week = new org.jfree.data.time.Week(summary.getWeek().getWeekNbrInYear(),
+						DateUtil.getYearForWeek(summary.getWeek().getStartDate()));
+				series.add(week, summary.getTotalNbrConsultation());
+			}
 		}
 		dataSet.addSeries(series);
 		return dataSet;
@@ -94,7 +91,7 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 		for (int i = 0; i < data.getSeriesCount(); i++) {
 			TimeSeries ser = data.getSeries(i);
 			for (int j = 0; j < ser.getItemCount(); j++) {
-				
+
 				double x = ser.getTimePeriod(j).getFirstMillisecond();
 				if (x < xMin) {
 					xMin = x;
@@ -122,8 +119,8 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 			double b = (n * sxy - sx * sy) / (n * sxx - sx * sx);
 			double a = sy / n - b * sx / n;
 
-			XYSeries regr = new XYSeries("Tendance sur la période: " + DEC_FORMAT.format(b * 1000 * 60 * 60 *24 * 7) + "\n"
-					+ "A l'origine: " + DEC_FORMAT.format(a));
+			XYSeries regr = new XYSeries("Tendance sur la période: " + DEC_FORMAT.format(b * 1000 * 60 * 60 * 24 * 7)
+					+ "\n" + "A l'origine: " + DEC_FORMAT.format(a));
 			regr.add(xMin, a + b * xMin);
 			regr.add(xMax, a + b * xMax);
 			coll.addSeries(regr);
@@ -131,8 +128,6 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 		return coll;
 	}
 
-
-	
 	private class ProcessListener implements ActionListener {
 
 		@Override

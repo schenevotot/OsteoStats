@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.swing.JLabel;
 
 import model.GlobalSummary;
-import model.Week;
 import ui.DateRangeNullable;
 import ui.GuiController;
 import util.DateUtil;
@@ -50,8 +49,8 @@ public class TopTenMonth extends AbstractDateRangeStat {
 			Month month = iterator.next();
 			JLabel label = new JLabel();
 
-			label.setText(i + ". " + "Mois de " + DateUtil.getMonthNameFromInt(month.getMonthInYear()) + " " + month.getYear() + " : "
-					+ month.getValue() + " consultations");
+			label.setText(i + ". " + "Mois de " + DateUtil.getMonthNameFromInt(month.getMonthInYear()) + " "
+					+ month.getYear() + " : " + month.getValue() + " consultations");
 			resultPanel.add(label);
 			i++;
 		}
@@ -63,23 +62,24 @@ public class TopTenMonth extends AbstractDateRangeStat {
 		Map<String, Month> monthMap = new HashMap<String, Month>();
 
 		for (GlobalSummary globalSummary : summaryList) {
-			Week week = globalSummary.getWeek();
-			Date start = week.getStartDate();
-			int monthNbr = DateUtil.getMonthInYearForWeek(start);
-			int yearNbr = DateUtil.getYearForWeek(start);
-			StringBuilder key = new StringBuilder();
-			key.append(monthNbr);
-			key.append(" - ");
-			key.append(yearNbr);
+			Date start = globalSummary.getWeek().getStartDate();
+			if (start != null) {
+				int monthNbr = DateUtil.getMonthInYearForWeek(start);
+				int yearNbr = DateUtil.getYearForWeek(start);
+				StringBuilder key = new StringBuilder();
+				key.append(monthNbr);
+				key.append(" - ");
+				key.append(yearNbr);
 
-			Month month = null;
-			if (monthMap.containsKey(key.toString())) {
-				month = monthMap.get(key.toString());
-			} else {
-				month = new Month(yearNbr, monthNbr);
-				monthMap.put(key.toString(), month);
+				Month month = null;
+				if (monthMap.containsKey(key.toString())) {
+					month = monthMap.get(key.toString());
+				} else {
+					month = new Month(yearNbr, monthNbr);
+					monthMap.put(key.toString(), month);
+				}
+				month.addToValue(globalSummary.getTotalNbrConsultation());
 			}
-			month.addToValue(globalSummary.getTotalNbrConsultation());
 		}
 		List<Month> monthList = new ArrayList<Month>(monthMap.values());
 

@@ -79,7 +79,7 @@ public class SummaryDialog extends JDialog implements Caller {
 		add(new JScrollPane(mainPanel));
 	}
 
-	private void addElements() {
+	private final void addElements() {
 		addPart1(mainPanel, BorderLayout.NORTH);
 		addPart2(mainPanel, BorderLayout.CENTER);
 		addPart3(mainPanel, BorderLayout.SOUTH);

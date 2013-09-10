@@ -145,12 +145,14 @@ public class ComparativeConsultationPerWeek extends AbstractDateRangeStat {
 		Map<Integer, Collection<GlobalSummary>> summaryMap = new LinkedHashMap<Integer, Collection<GlobalSummary>>();
 
 		for (GlobalSummary summary : summaryList) {
-			Integer year = DateUtil.getYearForWeek(summary.getWeek().getStartDate());
-			if (!summaryMap.containsKey(year)) {
-				summaryMap.put(year, new HashSet<GlobalSummary>());
+			if (summary.getWeek().getStartDate() != null) {
+				Integer year = DateUtil.getYearForWeek(summary.getWeek().getStartDate());
+				if (!summaryMap.containsKey(year)) {
+					summaryMap.put(year, new HashSet<GlobalSummary>());
+				}
+				Collection<GlobalSummary> col = summaryMap.get(year);
+				col.add(summary);
 			}
-			Collection<GlobalSummary> col = summaryMap.get(year);
-			col.add(summary);
 		}
 
 		return summaryMap;
