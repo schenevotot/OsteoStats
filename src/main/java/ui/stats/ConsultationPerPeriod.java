@@ -1,8 +1,6 @@
 package ui.stats;
 
 import java.awt.Paint;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -28,23 +26,22 @@ import util.DateUtil;
 public class ConsultationPerPeriod extends AbstractDateRangeChart {
 
 	private static final DecimalFormat DEC_FORMAT = new DecimalFormat("#0.000");
-	private GuiController controller;
 
 	public ConsultationPerPeriod(GuiController controller) {
+		super(controller);
 		super.setActionListener(new ProcessListener());
 		DEC_FORMAT.setRoundingMode(RoundingMode.HALF_UP);
-		this.controller = controller;
 	}
 
 	public String getName() {
 		return "Diagramme de consulations";
 	}
 
-	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {
+	List<GlobalSummary> processStats(DateRangeNullable dateRange) {
 		return controller.listAllSummaryInRange(dateRange, null, null);
 	}
 
-	private void processResult(List<GlobalSummary> summaryList) {
+	void processResult(List<GlobalSummary> summaryList) {
 		resultPanel.removeAll();
 
 		TimeSeriesCollection dataSet = createTimeSeriesCollection(summaryList);
@@ -120,23 +117,12 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 			double a = sy / n - b * sx / n;
 
 			XYSeries regr = new XYSeries("Tendance sur la période: " + DEC_FORMAT.format(b * 1000 * 60 * 60 * 24 * 7)
-					+ "\n" + "A l'origine: " + DEC_FORMAT.format(a));
+					+ "\n");
 			regr.add(xMin, a + b * xMin);
 			regr.add(xMax, a + b * xMax);
 			coll.addSeries(regr);
 		}
 		return coll;
-	}
-
-	private class ProcessListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DateRangeNullable dateRange = dateRangePanel.getDateRange();
-			List<GlobalSummary> summaryList = processStats(dateRange);
-			processResult(summaryList);
-		}
-
 	}
 
 }

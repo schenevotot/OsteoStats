@@ -1,7 +1,5 @@
 package ui.stats;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
 
@@ -13,27 +11,24 @@ import ui.DateRangeNullable;
 import ui.GuiController;
 import util.DateUtil;
 
-public class TopTenWeek extends AbstractDateRangeStat {
+public class TopTenWeek extends AbstractSimpleDateRangeStat {
 
 	private static final Integer MAX = 10;
 
-	private GuiController controller;
-
 	public TopTenWeek(GuiController controller) {
-		super();
+		super(controller);
 		super.setActionListener(new ProcessListener());
-		this.controller = controller;
 	}
 
 	public String getName() {
 		return "Top 10 semaines";
 	}
 
-	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {
+	List<GlobalSummary> processStats(DateRangeNullable dateRange) {
 		return controller.listNMaxSummaryInRange(dateRange, MAX, true);
 	}
 
-	private void processResult(List<GlobalSummary> summaryList) {
+	void processResult(List<GlobalSummary> summaryList) {
 
 		resultPanel.removeAll();
 		int i = 1;
@@ -53,17 +48,6 @@ public class TopTenWeek extends AbstractDateRangeStat {
 			i++;
 		}
 		resultPanel.updateUI();
-
-	}
-
-	private class ProcessListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DateRangeNullable dateRange = dateRangePanel.getDateRange();
-			List<GlobalSummary> summaryList = processStats(dateRange);
-			processResult(summaryList);
-		}
 
 	}
 

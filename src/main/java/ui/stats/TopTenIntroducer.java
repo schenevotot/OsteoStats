@@ -1,7 +1,5 @@
 package ui.stats;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -13,29 +11,26 @@ import model.Introducer;
 import ui.DateRangeNullable;
 import ui.GuiController;
 
-public class TopTenIntroducer extends AbstractDateRangeStat {
+public class TopTenIntroducer extends AbstractSimpleDateRangeStat {
 
 	private static final Integer MAX = 10;
 
-	private GuiController controller;
-	
 	private IntroducerSorter sorter = new IntroducerSorter();
 
 	public TopTenIntroducer(GuiController controller) {
-		super();
+		super(controller);
 		super.setActionListener(new ProcessListener());
-		this.controller = controller;
 	}
 
 	public String getName() {
 		return "Top "+ MAX +" adressants";
 	}
 
-	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {
+	List<GlobalSummary> processStats(DateRangeNullable dateRange) {
 		return controller.listAllSummaryInRange(dateRange, true, null);
 	}
 
-	private void processResult(List<GlobalSummary> summaryList) {
+	void processResult(List<GlobalSummary> summaryList) {
 		resultPanel.removeAll();
 
 		List<Entry<Introducer, Integer>> entryList = sorter.sortResults(summaryList);
@@ -51,18 +46,6 @@ public class TopTenIntroducer extends AbstractDateRangeStat {
 		}
 
 		resultPanel.updateUI();
-	}
-
-	
-	private class ProcessListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DateRangeNullable dateRange = dateRangePanel.getDateRange();
-			List<GlobalSummary> summaryList = processStats(dateRange);
-			processResult(summaryList);
-		}
-
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import ui.DateRangePanel;
+import ui.GuiController;
 
 /**
  * An abstract stat with a dateRangePanel.
@@ -17,14 +18,15 @@ import ui.DateRangePanel;
  */
 public abstract class AbstractDateRangeStat extends AbstractStat {
 
+	protected GuiController controller;
 	protected JPanel panel;
 	protected JButton button;
 	protected DateRangePanel dateRangePanel;
 	protected JPanel resultPanel;
 	private ActionListener listener;
-
-	public AbstractDateRangeStat() {
-
+	
+	public AbstractDateRangeStat(GuiController controller) {
+		this.controller = controller;
 	}
 
 	protected void setActionListener(ActionListener listener) {
@@ -51,5 +53,7 @@ public abstract class AbstractDateRangeStat extends AbstractStat {
 
 		return panel;
 	}
+	
+	
 
 }

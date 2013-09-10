@@ -15,12 +15,9 @@ import ui.GuiController;
 
 public class AverageWeek extends AbstractDateRangeStat {
 
-	private GuiController controller;
-
 	public AverageWeek(GuiController controller) {
-		super();
+		super(controller);
 		super.setActionListener(new ProcessListener());
-		this.controller = controller;
 	}
 
 	public String getName() {

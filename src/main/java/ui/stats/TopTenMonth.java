@@ -1,7 +1,5 @@
 package ui.stats;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,16 +16,13 @@ import ui.DateRangeNullable;
 import ui.GuiController;
 import util.DateUtil;
 
-public class TopTenMonth extends AbstractDateRangeStat {
+public class TopTenMonth extends AbstractSimpleDateRangeStat {
 
 	private static final int MAX = 10;
 
-	private GuiController controller;
-
 	public TopTenMonth(GuiController controller) {
-		super();
+		super(controller);
 		super.setActionListener(new ProcessListener());
-		this.controller = controller;
 	}
 
 	@Override
@@ -35,11 +30,11 @@ public class TopTenMonth extends AbstractDateRangeStat {
 		return "Top 10 mois";
 	}
 
-	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {
+	List<GlobalSummary> processStats(DateRangeNullable dateRange) {
 		return controller.listAllSummaryInRange(dateRange, true, null);
 	}
 
-	private void processResult(List<GlobalSummary> summaryList) {
+	void processResult(List<GlobalSummary> summaryList) {
 
 		resultPanel.removeAll();
 
@@ -93,16 +88,4 @@ public class TopTenMonth extends AbstractDateRangeStat {
 
 		return monthList;
 	}
-
-	private class ProcessListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DateRangeNullable dateRange = dateRangePanel.getDateRange();
-			List<GlobalSummary> summaryList = processStats(dateRange);
-			processResult(summaryList);
-		}
-
-	}
-
 }

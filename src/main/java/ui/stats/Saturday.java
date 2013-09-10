@@ -1,7 +1,5 @@
 package ui.stats;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -10,25 +8,22 @@ import model.GlobalSummary;
 import ui.DateRangeNullable;
 import ui.GuiController;
 
-public class Saturday extends AbstractDateRangeStat {
-
-	private GuiController controller;
+public class Saturday extends AbstractSimpleDateRangeStat {
 
 	public Saturday(GuiController controller) {
-		super();
+		super(controller);
 		super.setActionListener(new ProcessListener());
-		this.controller = controller;
 	}
 
 	public String getName() {
 		return "Proportion de consulations le samedi";
 	}
-
-	private List<GlobalSummary> processStats(DateRangeNullable dateRange) {
+	
+	List<GlobalSummary> processStats(DateRangeNullable dateRange) {
 		return controller.listAllSummaryInRange(dateRange, true, null);
 	}
 
-	private void processResult(List<GlobalSummary> summaryList) {
+	void processResult(List<GlobalSummary> summaryList) {
 
 		resultPanel.removeAll();
 		JLabel label = new JLabel();
@@ -48,15 +43,6 @@ public class Saturday extends AbstractDateRangeStat {
 		return saturdays / total;
 	}
 
-	private class ProcessListener implements ActionListener {
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			DateRangeNullable dateRange = dateRangePanel.getDateRange();
-			List<GlobalSummary> summaryList = processStats(dateRange);
-			processResult(summaryList);
-		}
-
-	}
 
 }
