@@ -14,6 +14,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import ui.stats.AverageWeek;
+import ui.stats.ComparativeDoubleDateRangeStat;
 import ui.stats.ConsultationPerPeriod;
 import ui.stats.ComparativeConsultationPerWeek;
 import ui.stats.Saturday;
@@ -82,6 +83,7 @@ public class MainWindow extends JFrame {
 		manager.plugStat(new TopTenIntroducer(controller));
 		manager.plugStat(new ComparativeConsultationPerWeek(controller));
 		manager.plugStat(new ConsultationPerPeriod(controller));
+		manager.plugStat(new ComparativeDoubleDateRangeStat(controller));
 		return manager.processStatsSummaryPanel();
 	}
 	

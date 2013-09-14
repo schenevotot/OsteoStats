@@ -21,7 +21,7 @@ import ui.DateRangeNullable;
 import ui.GuiController;
 import util.DateUtil;
 
-public class ComparativeConsultationPerWeek extends AbstractDateRangeChart {
+public class ComparativeConsultationPerWeek extends AbstractSimpleDateRangeStat {
 
 	public ComparativeConsultationPerWeek(GuiController controller) {
 		super(controller);
@@ -57,7 +57,7 @@ public class ComparativeConsultationPerWeek extends AbstractDateRangeChart {
 			dataSetList.add(dataSet);
 		}
 
-		JFreeChart chart = createChart(dataSetList, "Consultations", "Date", "Consultations", "dd-MMM");
+		JFreeChart chart = AbstractDateRangeChartUtil.createChart(dataSetList, "Consultations", "Date", "Consultations", "dd-MMM");
 		ChartPanel chartPanel = new ChartPanel(chart, false);
 		chartPanel.setDomainZoomable(false);
 		chartPanel.setRangeZoomable(false);

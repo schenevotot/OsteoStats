@@ -23,7 +23,7 @@ public abstract class AbstractDateRangeStat extends AbstractStat {
 	protected JButton button;
 	protected DateRangePanel dateRangePanel;
 	protected JPanel resultPanel;
-	private ActionListener listener;
+	protected ActionListener listener;
 	
 	public AbstractDateRangeStat(GuiController controller) {
 		this.controller = controller;

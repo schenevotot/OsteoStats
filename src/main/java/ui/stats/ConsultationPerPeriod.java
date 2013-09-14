@@ -21,9 +21,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import ui.DateRangeNullable;
 import ui.GuiController;
-import util.DateUtil;
 
-public class ConsultationPerPeriod extends AbstractDateRangeChart {
+public class ConsultationPerPeriod extends AbstractSimpleDateRangeStat {
 
 	private static final DecimalFormat DEC_FORMAT = new DecimalFormat("#0.000");
 
@@ -44,8 +43,8 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 	void processResult(List<GlobalSummary> summaryList) {
 		resultPanel.removeAll();
 
-		TimeSeriesCollection dataSet = createTimeSeriesCollection(summaryList);
-		JFreeChart chart = createChart(dataSet, "Consultations", "Date", "Consultations", null);
+		TimeSeriesCollection dataSet = AbstractDateRangeChartUtil.createTimeSeriesCollection(summaryList);
+		JFreeChart chart = AbstractDateRangeChartUtil.createChart(dataSet, "Consultations", "Date", "Consultations", null);
 		processRegression(chart.getXYPlot(), dataSet);
 		ChartPanel chartPanel = new ChartPanel(chart, false);
 		chartPanel.setDomainZoomable(false);
@@ -54,19 +53,6 @@ public class ConsultationPerPeriod extends AbstractDateRangeChart {
 		resultPanel.updateUI();
 	}
 
-	private TimeSeriesCollection createTimeSeriesCollection(List<GlobalSummary> summaryList) {
-		TimeSeriesCollection dataSet = new TimeSeriesCollection();
-		TimeSeries series = new TimeSeries("Consultations");
-		for (GlobalSummary summary : summaryList) {
-			if (summary.getWeek().getStartDate() != null) {
-				org.jfree.data.time.Week week = new org.jfree.data.time.Week(summary.getWeek().getWeekNbrInYear(),
-						DateUtil.getYearForWeek(summary.getWeek().getStartDate()));
-				series.add(week, summary.getTotalNbrConsultation());
-			}
-		}
-		dataSet.addSeries(series);
-		return dataSet;
-	}
 
 	private void processRegression(XYPlot plot, TimeSeriesCollection data) {
 		XYItemRenderer scatterRenderer = plot.getRenderer();

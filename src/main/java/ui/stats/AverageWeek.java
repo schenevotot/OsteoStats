@@ -7,9 +7,6 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import model.GlobalSummary;
-
-import org.apache.commons.math3.stat.descriptive.moment.Mean;
-
 import ui.DateRangeNullable;
 import ui.GuiController;
 
@@ -41,38 +38,31 @@ public class AverageWeek extends AbstractDateRangeStat {
 
 		resultPanel.removeAll();
 
-		Double globalAverage = average(summaryList);
-		Double holidaysAverage = average(summaryListHolidays);
-		Double notHolidaysAverage = average(summaryListNotHolidays);
+		Double globalAverage = StatUtil.average(summaryList);
+		Double holidaysAverage = StatUtil.average(summaryListHolidays);
+		Double notHolidaysAverage = StatUtil.average(summaryListNotHolidays);
+
+		Double globalRatioNewPatients = StatUtil.ratioNewPatients(summaryList);
+		Double holidaysRatioNewPatients = StatUtil.ratioNewPatients(summaryListHolidays);
+		Double notHolidaysRatioNewPatients = StatUtil.ratioNewPatients(summaryListNotHolidays);
 
 		JLabel globalLabel = new JLabel();
-		globalLabel.setText("Moyenne globale : " + globalAverage);
+		globalLabel.setText("Moyenne globale : " + twoDigitsFormat.format(globalAverage) + " dont "
+				+ twoDigitsFormat.format(globalRatioNewPatients) + "% de nouveaux patients");
 		resultPanel.add(globalLabel);
 
 		JLabel holidayLabel = new JLabel();
-		holidayLabel.setText("Moyenne des semaines de vacances scolaires : " + holidaysAverage);
+		holidayLabel.setText("Moyenne des semaines de vacances scolaires : " + twoDigitsFormat.format(holidaysAverage)
+				+ " dont " + twoDigitsFormat.format(holidaysRatioNewPatients) + "% de nouveaux patients");
 		resultPanel.add(holidayLabel);
 
 		JLabel notHolidayLabel = new JLabel();
-		notHolidayLabel.setText("Moyenne hors vacances scolaires : " + notHolidaysAverage);
+		notHolidayLabel.setText("Moyenne hors vacances scolaires : " + twoDigitsFormat.format(notHolidaysAverage)
+				+ " dont " + twoDigitsFormat.format(notHolidaysRatioNewPatients) + "% de nouveaux patients");
 		resultPanel.add(notHolidayLabel);
 
 		resultPanel.updateUI();
 
-	}
-
-	private Double average(List<GlobalSummary> summaryList) {
-		double[] values = new double[summaryList.size()];
-		double[] weights =  new double[summaryList.size()];
-		int i = 0;
-		for (GlobalSummary globalSummary : summaryList) {
-			values[i]=Double.valueOf(globalSummary.getTotalNbrConsultation());
-			weights[i] = Double.valueOf(globalSummary.getWeek().getBusinessWeek() / 100);
-			i++;
-		}
-		Mean mean = new Mean();
-		mean.evaluate(values, weights);
-		return mean.evaluate(values, weights);
 	}
 
 	private class ProcessListener implements ActionListener {

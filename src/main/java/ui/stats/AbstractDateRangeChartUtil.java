@@ -8,6 +8,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import model.GlobalSummary;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
@@ -18,21 +20,33 @@ import org.jfree.chart.labels.StandardXYToolTipGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
-import ui.GuiController;
 import util.DateUtil;
 
-public abstract class AbstractDateRangeChart extends AbstractSimpleDateRangeStat {
+public abstract class AbstractDateRangeChartUtil {
 
 	private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
-	public AbstractDateRangeChart(GuiController controller) {
-		super(controller);
+
+	protected static TimeSeriesCollection createTimeSeriesCollection(List<GlobalSummary> summaryList) {
+		TimeSeriesCollection dataSet = new TimeSeriesCollection();
+		TimeSeries series = new TimeSeries("Consultations");
+		for (GlobalSummary summary : summaryList) {
+			if (summary.getWeek().getStartDate() != null) {
+				org.jfree.data.time.Week week = new org.jfree.data.time.Week(summary.getWeek().getWeekNbrInYear(),
+						DateUtil.getYearForWeek(summary.getWeek().getStartDate()));
+				series.add(week, summary.getTotalNbrConsultation());
+			}
+		}
+		dataSet.addSeries(series);
+		return dataSet;
 	}
 
-	protected JFreeChart createChart(XYDataset dataSet, String title, String domainTitle, String rangeTitle,
+	
+	protected static JFreeChart createChart(XYDataset dataSet, String title, String domainTitle, String rangeTitle,
 			String dateFormat) {
 		// create the chart...
 		JFreeChart chart = ChartFactory.createTimeSeriesChart(title, // chart
@@ -86,7 +100,7 @@ public abstract class AbstractDateRangeChart extends AbstractSimpleDateRangeStat
 		return chart;
 	}
 
-	protected JFreeChart createChart(List<TimeSeriesCollection> dataSetList, String title, String domainTitle,
+	protected static JFreeChart createChart(List<TimeSeriesCollection> dataSetList, String title, String domainTitle,
 			String rangeTitle, String dateFormat) {
 
 		// Y axis
