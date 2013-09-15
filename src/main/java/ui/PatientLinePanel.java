@@ -52,9 +52,10 @@ public class PatientLinePanel extends JPanel {
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		setBorder(blackline);
 
+		addTotalLine();
 		// Add the tech line (Editer adressants, +) in the same panel
 		addTechLine();
-		addTotalLine();
+		
 		init(summary);
 	}
 
@@ -77,8 +78,8 @@ public class PatientLinePanel extends JPanel {
 
 	public final synchronized void newLine(IntroducerSummary introSummary) {
 		IntroLinePanel introLinePanel = new IntroLinePanel(introSummary, introUIId, this, controller);
-		// Here we set the size, and not the id
-		add(introLinePanel, introLinePanelMap.size());
+		// Here we set the size +1 (because of the "Total" line, and not the id
+		add(introLinePanel, introLinePanelMap.size() + 1);
 		introLinePanelMap.put(introUIId, introLinePanel);
 		introUIId++;
 	}
@@ -140,6 +141,8 @@ public class PatientLinePanel extends JPanel {
 
 	private void addTotalLine() {
 		JPanel totalPanel = new JPanel();
+		Border blackline = BorderFactory.createLineBorder(Color.black);
+		totalPanel.setBorder(blackline);
 		JLabel totalLabel = new JLabel("Total:");
 
 		totalTextField = new JTextField(2);

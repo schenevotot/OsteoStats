@@ -52,17 +52,26 @@ public class GuiController {
 	}
 
 	private List<Introducer> listAllIntroducerByImportance() {
-		// List<Introducer> introList = daoFacade.listAllIntroducer();
+
 		List<GlobalSummary> globalSummaryList = daoFacade.listAllGlobalSummary();
 		IntroducerSorter introSorter = new IntroducerSorter();
 		List<Entry<Introducer, Integer>> sortedIntroducers = introSorter.sortResults(globalSummaryList);
 
 		List<Introducer> introducers = new ArrayList<Introducer>(sortedIntroducers.size());
-		for (Entry<Introducer,Integer> entry : sortedIntroducers) {
+		for (Entry<Introducer, Integer> entry : sortedIntroducers) {
 			introducers.add(entry.getKey());
 		}
+
+		// Add all the 0 Introducers
+		List<Introducer> introList = daoFacade.listAllIntroducer();
+		for (Introducer introducer : introList) {
+			if (!introducers.contains(introducer)) {
+				introducers.add(introducer);
+			}
+		}
+
 		return introducers;
-		
+
 	}
 
 	public IntroducerTableModel listAllIntroducersAsTableModel() {

@@ -102,8 +102,7 @@ public class ConsultationPerPeriod extends AbstractSimpleDateRangeStat {
 			double b = (n * sxy - sx * sy) / (n * sxx - sx * sx);
 			double a = sy / n - b * sx / n;
 
-			XYSeries regr = new XYSeries("Tendance sur la période: " + DEC_FORMAT.format(b * 1000 * 60 * 60 * 24 * 7)
-					+ "\n");
+			XYSeries regr = new XYSeries("Tendance sur la période: " + DEC_FORMAT.format(b * 1000 * 60 * 60 * 24 * 7));
 			regr.add(xMin, a + b * xMin);
 			regr.add(xMax, a + b * xMax);
 			coll.addSeries(regr);
