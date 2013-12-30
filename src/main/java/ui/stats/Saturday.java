@@ -16,7 +16,7 @@ public class Saturday extends AbstractSimpleDateRangeStat {
 	}
 
 	public String getName() {
-		return "Proportion de consulations le samedi";
+		return "Proportion de consultations le samedi";
 	}
 	
 	List<GlobalSummary> processStats(DateRangeNullable dateRange) {
