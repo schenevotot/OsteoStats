@@ -33,7 +33,7 @@ public class ConsultationPerPeriod extends AbstractSimpleDateRangeStat {
 	}
 
 	public String getName() {
-		return "Diagramme de consulations";
+		return "Diagramme de consultations";
 	}
 
 	List<GlobalSummary> processStats(DateRangeNullable dateRange) {

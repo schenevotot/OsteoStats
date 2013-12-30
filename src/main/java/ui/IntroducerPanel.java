@@ -87,7 +87,7 @@ public class IntroducerPanel extends JPanel {
 
 		jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jTable.setToolTipText("Récap");
+		jTable.setToolTipText("Récapitulatif");
 
 		jTable.getSelectionModel().addListSelectionListener(new IntroducerListListener());
 
@@ -128,6 +128,11 @@ public class IntroducerPanel extends JPanel {
 			}
 		}
 	}
+	
+	public void resetPanel() {
+		this.caller = null;
+		backButton.setEnabled(false);
+	}
 
 	public void setCaller(Caller caller) {
 		if (caller != null) {
@@ -158,6 +163,7 @@ public class IntroducerPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (caller != null) {
 				caller.callBack();
+				resetPanel();
 			}
 		}
 	}

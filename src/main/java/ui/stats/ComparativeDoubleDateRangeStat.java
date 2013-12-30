@@ -74,10 +74,6 @@ public class ComparativeDoubleDateRangeStat extends AbstractDateRangeStat {
 
 		processStats(summaryList1);
 		processStats(summaryList2);
-
-		System.out.println(summaryList1);
-		System.out.println(summaryList2);
-
 	}
 
 	private void processStats(List<GlobalSummary> summaryList) {

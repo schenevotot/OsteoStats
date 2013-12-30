@@ -79,7 +79,7 @@ public class SummaryDialog extends JDialog implements Caller {
 		add(new JScrollPane(mainPanel));
 	}
 
-	private final void addElements() {
+	private void addElements() {
 		addPart1(mainPanel, BorderLayout.NORTH);
 		addPart2(mainPanel, BorderLayout.CENTER);
 		addPart3(mainPanel, BorderLayout.SOUTH);
@@ -126,7 +126,7 @@ public class SummaryDialog extends JDialog implements Caller {
 		textPanelPart2.add(patientLinePanel);
 	}
 
-	private final void addPart3(JPanel textPanel, String cstraint) {
+	private void addPart3(JPanel textPanel, String cstraint) {
 		JPanel textPanelPart3 = new JPanel();
 		textPanel.add(textPanelPart3, cstraint);
 
@@ -314,6 +314,7 @@ public class SummaryDialog extends JDialog implements Caller {
 				removeIncoherentParameters(summaryFromUI);
 			} else {
 				controller.saveOrUpdateGlobalSummary(summaryFromUI);
+				mainWindow.getIntroducerPanel().resetPanel();
 				mainWindow.getSummaryPanel().refreshTableWithAllSummaries();
 				dispose();
 			}

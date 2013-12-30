@@ -64,16 +64,15 @@ public class MainWindow extends JFrame {
 
 		introducerPanel = new IntroducerPanel(controller);
 		tabbedPane.add("Adressants", introducerPanel);
-		
+
 		statPanel = buildStatPanel();
 		tabbedPane.add("Statistiques", statPanel);
-		
+
 		// The following line enables to use scrolling tabs.
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		mainPanel.add(tabbedPane);
 	}
-	
-	
+
 	private JPanel buildStatPanel() {
 		StatsManager manager = new StatsManager();
 		manager.plugStat(new TopTenWeek(controller));
@@ -86,13 +85,17 @@ public class MainWindow extends JFrame {
 		manager.plugStat(new ComparativeDoubleDateRangeStat(controller));
 		return manager.processStatsSummaryPanel();
 	}
-	
+
 	public JTabbedPane getTabbedPane() {
 		return tabbedPane;
 	}
 
 	public SummaryPanel getSummaryPanel() {
 		return summaryPanel;
+	}
+	
+	public IntroducerPanel getIntroducerPanel() {
+		return introducerPanel;
 	}
 
 	public static void main(String[] args) {
@@ -132,7 +135,7 @@ public class MainWindow extends JFrame {
 	public void navigateToIntroducerPane(Caller summaryDialog) {
 		introducerPanel.setCaller(summaryDialog);
 		getTabbedPane().setSelectedComponent(introducerPanel);
-		
+
 	}
 
 }

@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import model.GlobalSummary;
 
@@ -26,10 +27,13 @@ import org.jfree.data.xy.XYDataset;
 
 import util.DateUtil;
 
-public abstract class AbstractDateRangeChartUtil {
+public final class AbstractDateRangeChartUtil {
 
-	private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
+	private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
+	private AbstractDateRangeChartUtil() {
+
+	}
 
 	protected static TimeSeriesCollection createTimeSeriesCollection(List<GlobalSummary> summaryList) {
 		TimeSeriesCollection dataSet = new TimeSeriesCollection();
@@ -45,7 +49,6 @@ public abstract class AbstractDateRangeChartUtil {
 		return dataSet;
 	}
 
-	
 	protected static JFreeChart createChart(XYDataset dataSet, String title, String domainTitle, String rangeTitle,
 			String dateFormat) {
 		// create the chart...
@@ -73,7 +76,7 @@ public abstract class AbstractDateRangeChartUtil {
 		TickUnitSource ticks = NumberAxis.createIntegerTickUnits();
 		DateAxis axis = (DateAxis) plot.getDomainAxis();
 		if (dateFormat != null) {
-			axis.setDateFormatOverride(new SimpleDateFormat(dateFormat));
+			axis.setDateFormatOverride(new SimpleDateFormat(dateFormat, Locale.getDefault()));
 		} else {
 			axis.setDateFormatOverride(DEFAULT_DATE_FORMAT);
 		}
@@ -113,8 +116,8 @@ public abstract class AbstractDateRangeChartUtil {
 		for (TimeSeriesCollection dataSet : dataSetList) {
 			// Create an X axis, not visible
 			DateAxis localDateAxis = new DateAxis(domainTitle);
-			localDateAxis.setVisible(true);
-			localDateAxis.setDateFormatOverride(new SimpleDateFormat(dateFormat));
+			localDateAxis.setVisible(i == 0);
+			localDateAxis.setDateFormatOverride(new SimpleDateFormat(dateFormat, Locale.getDefault()));
 
 			// For the range of the axis to have a good superposition
 			int year = ((org.jfree.data.time.Week) dataSet.getSeries(0).getTimePeriod(0)).getYearValue();
@@ -129,8 +132,8 @@ public abstract class AbstractDateRangeChartUtil {
 			XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 			renderer.setUseFillPaint(true);
 			renderer.setBaseFillPaint(Color.white);
-			renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator("{1}: {2}",
-					new SimpleDateFormat("MMM yyyy"), new DecimalFormat("0")));
+			renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator("{1}: {2}", new SimpleDateFormat(
+					"MMM yyyy", Locale.getDefault()), new DecimalFormat("0")));
 
 			// label the points
 			NumberFormat format = NumberFormat.getNumberInstance();

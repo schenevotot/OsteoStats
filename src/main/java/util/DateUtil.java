@@ -84,7 +84,7 @@ public class DateUtil {
 		return c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
 	}
 
-	public static String dateFormat(Date date) {
+	public static synchronized String dateFormat(Date date) {
 		return dateFormatter.format(date);
 	}
 

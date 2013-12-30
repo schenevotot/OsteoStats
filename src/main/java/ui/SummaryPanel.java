@@ -142,7 +142,7 @@ public class SummaryPanel extends JPanel {
 			int selectedRow = jTable.getSelectedRow();
 			SummaryDialog dialog = null;
 			// Check if a row is selected in the table
-			if (modifySummary & selectedRow > -1) {
+			if (modifySummary && selectedRow > -1) {
 				GlobalSummary selectedSummary = summaryTableModel.getGlobalSummaryAt(selectedRow);
 				dialog = new SummaryDialog(mainWindow, controller, selectedSummary);
 
